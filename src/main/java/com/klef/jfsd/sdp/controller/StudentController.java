@@ -115,12 +115,17 @@ public class StudentController {
 		HttpSession session = request.getSession();
 		Student student = (Student) session.getAttribute("student");
 		
-		if(student.getRegistarationStatus().equals("Eligible")) 
+		String ay=request.getParameter("ay");
+		String sem =request.getParameter("sem");
+		
+		
+		if(student.getRegistarationStatus().equals("Elgible")) 
 		{
-			List<Course> fcmlist =  studentService.getCoursesForReg(student.getBatchname());
+			List<Course> fcmlist =  studentService.getSectionsForReg(student.getBatchname(),ay,sem);
 			mv.addObject("fcm", fcmlist);
 			for (Course fcm : fcmlist) {
 				int id = fcm.getCourseid();
+				System.out.println(fcm.getCourseid());
 				mv.addObject("sections" + id, studentService.getSectionsForReg(id));
 			}
 		}
@@ -141,6 +146,7 @@ public class StudentController {
 		
 		HttpSession session = request.getSession();
 		Student s = (Student) session.getAttribute("student");
+		
 		
 		for(int i=1;i<=n;i++)
 		{
@@ -179,22 +185,39 @@ public class StudentController {
 		return mv;
 	}
 	
-	
-	@GetMapping("ViewMyCourses")
-	public ModelAndView ViewMyCourses()
+	@GetMapping("ViewMyCoursesHome")
+	public ModelAndView ViewMyCoursesHome()
 	{
 		ModelAndView mv = new ModelAndView();
+		mv.setViewName("ViewMyCoursesHome");
+		return mv;
+	}
+	
+	@GetMapping("ViewMyCourses")
+	public ModelAndView ViewMyCourses(HttpServletRequest request)
+	{
+		ModelAndView mv = new ModelAndView();
+		String ay=request.getParameter("academicyear");
+		String sem =request.getParameter("sem");
 		mv.setViewName("ViewMyCoursesStudent");
-		mv.addObject("scm",studentService.viewStudentCourses());
+		mv.addObject("sem", sem);
+		mv.addObject("ay",ay);
+		List<StudentCourseMapping> scm = studentService.viewStudentCourses(ay, sem);
+		if(scm.isEmpty())
+			mv.addObject("msg","No courses available ");
+		else
+			mv.addObject("scm",scm);
 		return mv;
 	}
 	
 	@GetMapping("ViewCourseMaterials")
-	public ModelAndView ViewCourseMaterials(@RequestParam int cid,@RequestParam int section)
+	public ModelAndView ViewCourseMaterials(@RequestParam int cid,@RequestParam int section,@RequestParam String ay,@RequestParam String sem)
 	{
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("ViewCourseMaterials");
 		mv.addObject("materials",studentService.ViewAllMaterials(cid, section));
+		mv.addObject("sem", sem);
+		mv.addObject("ay",ay);
 		return mv;
 	}
 	

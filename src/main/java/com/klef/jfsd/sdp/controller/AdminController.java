@@ -395,6 +395,8 @@ public class AdminController
      String coursetitle = request.getParameter("coursetitle");
      String ltps = request.getParameter("ltps");
      int credits = Integer.parseInt(request.getParameter("credits"));
+     String ay = request.getParameter("academicyear");
+     String sem = request.getParameter("sem");
      
        Course course = new Course();
        course.setCoursecode(coursecode);
@@ -402,6 +404,8 @@ public class AdminController
        course.setLtps(ltps);
        course.setCredits(credits);
        course.setForBatch(ForBatch);
+       course.setAcademicYear(ay);
+       course.setOfferedsem(sem);
        
        String msg = service.addcourse(course);
        
@@ -410,14 +414,25 @@ public class AdminController
      
        return mv;
     }
+	
+	@GetMapping("facultyCourseMappingHome")
+	public ModelAndView facultyCourseMappingHome()
+	{
+		ModelAndView mv = new ModelAndView("facultyCourseMappingHome");		
+		return mv;
+	}
 	@GetMapping("facultycoursemapping")
-	public ModelAndView facultycoursemapping()
+	public ModelAndView facultycoursemapping(HttpServletRequest request)
 	{
 		ModelAndView mv = new ModelAndView("facultycoursemapping");
 		
-		List<Course> courselist = service.displayAllCourses();
-		mv.addObject("coursedata", courselist);
+		String ay=request.getParameter("academicyear");
+		String sem =request.getParameter("sem");
 		
+		List<Course> courselist = service.viewCourseBySem(ay, sem);
+		mv.addObject("coursedata", courselist);
+		mv.addObject("ay", ay);
+		mv.addObject("sem", sem);
 		List<Faculty> facultylist = service.viewAllFaculty();
 		mv.addObject("facultydata", facultylist);
 		
@@ -457,6 +472,10 @@ public class AdminController
 		  }
 		  
 		  mv.addObject("msg", msg);
+		  String ay=request.getParameter("ay");
+		  String sem =request.getParameter("sem");
+		  mv.addObject("academicyear", ay);
+		  mv.addObject("sem", sem);
 		  
 		  mv.setViewName("redirect:/Admin/facultycoursemapping");
 		  

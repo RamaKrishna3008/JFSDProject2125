@@ -14,11 +14,11 @@ public interface StudentService{
 	public boolean updateStudent(Student st);
 	
 	
-	public List<Course> getCoursesForReg(String batch);
+	public List<Course> getSectionsForReg(String batch,String ay,String sem);
 	public List<FacultyCourseMapping> getSectionsForReg(int id);
 	public String MapCourseToStudent(StudentCourseMapping mapping);
 	public Long checkStudentCourseMapping(String stduentid, int courseid, int section);
-	public List<StudentCourseMapping> viewStudentCourses();
+	public List<StudentCourseMapping> viewStudentCourses(String academicYear,String offeredsem);
 	public List<FacultyStudentCourseMaterials> ViewAllMaterials(int cid,int section);
 	public FacultyStudentCourseMaterials ViewMaterialById(int id);
 }

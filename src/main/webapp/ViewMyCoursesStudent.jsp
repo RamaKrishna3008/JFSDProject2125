@@ -3,7 +3,8 @@
 
 <html> 
 <head> 
-<title>View Student Course Mapping</title>
+<title>SHS University</title>
+    <link rel="icon" href="/images/university-icon.png">
 <style>
  
 body {
@@ -164,9 +165,16 @@ label {
 <body>
 <%@include file="studentnavbar.jsp" %>
 
-<a href="Courses/Registration" class="register-link">Register New Courses</a>
+<a href="Courses/Registration?ay=${ay}&sem=${sem}" class="register-link">Register New Courses</a>
+<c:if test="${msg != null}">
+    <h1 align="center">${msg}</h1>
+</c:if>
+
+<c:if test="${msg == null}">
 <div class="form-container">
+
     
+
     <h2>My Courses</h2>
 
     <table>
@@ -185,7 +193,7 @@ label {
                 <td><c:out value="${scm.section}" /></td>
                 <td><c:out value="${scm.faculty.name}" /></td>
                 <td>
-                    <a href="ViewCourseMaterials?cid=${scm.course.courseid}&section=${scm.section}" 
+                    <a href="ViewCourseMaterials?cid=${scm.course.courseid}&section=${scm.section}&ay=${ay}&sem=${sem}" 
                        class="course-materials-link">
                         View Course Materials
                     </a>
@@ -193,7 +201,8 @@ label {
             </tr>
         </c:forEach>
     </table>
-</div>
+    </div>
+    </c:if>
 
 </body> 
 </html>

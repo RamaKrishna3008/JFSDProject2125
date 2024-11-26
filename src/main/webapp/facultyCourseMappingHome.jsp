@@ -1,14 +1,10 @@
-<%@ page contentType="text/html; charset=ISO-8859-1" isELIgnored="false"%> 
 <%@ include file="AdminHome.jsp"%>
-<%@ taglib uri="jakarta.tags.core" prefix="c"%> 
-<%String msg = request.getParameter("msg"); %>
-
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>SHS University</title>
-    <link rel="icon" href="/images/university-icon.png">
+<link rel="icon" href="/images/university-icon.png">
 <style>
   body {
     background-color: #f0f4f8;
@@ -117,52 +113,35 @@
 <div class="form-container">
   <h2>Faculty Course Mapping</h2>
 
-  <h3><%if(msg!=null){%>
-  <%=msg%> 
-  <%}%></h3>
   
-  <form method="post" action="fcoursemappinginsert">
+  <form action="facultycoursemapping">
     <table>
       <tr>
-        <td><label>Select Faculty</label></td>
-        <td>
-          <select name="fid" required>
-            <option value="">--Select--</option>
-            <c:forEach items="${facultydata}" var="faculty"> 
-              <option value="${faculty.id}">${faculty.id}-${faculty.name}</option>
-            </c:forEach>
-          </select>
+        <td><label for="academicyear">Academic Year</label>
+			<select id="academicyear" name="academicyear" required>
+			<option value="">--Select--</option>
+   			 <option value="2025-2024">2025-2024</option>
+    		<option value="2024-2023">2024-2023</option>
+			</select></td></tr>
+			
+			<tr><td><label for="sem">Offered Semester</label>
+			<select id="sem" name="sem" required>
+			<option value="">--Select--</option>
+   			 <option value="ODD">ODD</option>
+    		<option value="EVEN">EVEN</option>
+    		<option value="SUMMER">SUMMER</option>
+			</select>
         </td>
       </tr>
       <tr>
-        <td><label>Select Course</label></td>
-        <td>
-          <select name="cid" required>
-            <option value="">--Select--</option>
-            <c:forEach items="${coursedata}" var="course"> 
-              <option value="${course.courseid}">${course.coursecode}-${course.coursetitle}</option>
-            </c:forEach>
-          </select>
-        </td>
-      </tr>
-      <tr>
-        <td><label>Provide Section</label></td>
-        <td>
-          <input type="number" name="section" min="1" max="40" required>
-        </td>
-      </tr>
-      <tr>
-        <td></td>
         <td class="center">
-        <input type="hidden" name="ay" value="${ay }">
-        <input type="hidden" name="sem" value="${sem }">
           <input type="submit" value="Submit" class="button">
-          <input type="reset" value="Clear" class="button">
         </td>
       </tr>
     </table>
   </form>
 </div>
+
 
 </body>
 </html>

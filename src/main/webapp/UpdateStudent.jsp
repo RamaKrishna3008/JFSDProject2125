@@ -4,9 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Student</title>
+    <title>SHS University</title>
+    <link rel="icon" href="/images/university-icon.png">
 	<style>
-		.container {
+.container {
     max-width: 600px;
     margin: 2rem auto;
     padding: 2rem;
@@ -20,6 +21,7 @@ h2 {
     margin-bottom: 1.5rem;
     text-align: center;
     font-size: 24px;
+    font-weight: 600;
 }
 
 form {
@@ -32,39 +34,75 @@ label {
     font-weight: 500;
     color: #555;
     margin-bottom: 0.25rem;
+    display: block;
 }
 
 input[type="text"],
 input[type="email"],
 input[type="number"],
 input[type="password"],
-input[type="file"] {
+input[type="file"],
+textarea,
+select {
     width: 100%;
     padding: 0.75rem;
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 16px;
-    transition: border-color 0.3s ease;
+    transition: all 0.3s ease;
+    background-color: #fff;
 }
 
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="number"]:focus,
-input[type="password"]:focus {
+textarea {
+    resize: vertical;
+    min-height: 100px;
+    font-family: inherit;
+}
+
+select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1em;
+    padding-right: 2.5rem;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
     outline: none;
     border-color: #4a90e2;
     box-shadow: 0 0 5px rgba(74, 144, 226, 0.3);
 }
 
+/* Readonly inputs */
 input[readonly] {
     background-color: #f5f5f5;
     cursor: not-allowed;
 }
 
+small {
+    color: #666;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: block;
+}
+
+input[type="file"] {
+    padding: 0.5rem;
+    background-color: #f8f9fa;
+    border: 1px dashed #ddd;
+}
+
+input[type="file"]:hover {
+    background-color: #f0f0f0;
+}
+
 .button-group {
     display: flex;
     gap: 1rem;
-    margin-top: 1rem;
+    margin-top: 1.5rem;
 }
 
 input[type="submit"],
@@ -76,7 +114,9 @@ input[type="reset"] {
     font-size: 16px;
     font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 input[type="submit"] {
@@ -86,6 +126,7 @@ input[type="submit"] {
 
 input[type="submit"]:hover {
     background-color: #357abd;
+    transform: translateY(-1px);
 }
 
 input[type="reset"] {
@@ -95,18 +136,12 @@ input[type="reset"] {
 
 input[type="reset"]:hover {
     background-color: #d0d0d0;
+    transform: translateY(-1px);
 }
 
-/* Error state styling */
 input:invalid {
     border-color: #dc3545;
 }
-
-input[type="file"] {
-    padding: 0.5rem;
-    background-color: #f8f9fa;
-}
-
 @media (max-width: 480px) {
     .container {
         margin: 1rem;
@@ -120,6 +155,10 @@ input[type="file"] {
     input[type="submit"],
     input[type="reset"] {
         width: 100%;
+    }
+    
+    h2 {
+        font-size: 20px;
     }
 }
 	</style>
@@ -172,26 +211,7 @@ input[type="file"] {
             </div>
         </form>
     </div>
-    <div id="toast" class="toast"></div>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const message = urlParams.get('message');
-            if (message) {
-                const toast = document.getElementById("toast");
-                toast.textContent = "Registered Successful";
-                
-                if (message.includes("success")) {
-                    toast.classList.add("show", "success");
-                } else {
-                    toast.classList.add("show", "failure");
-                }
-                
-                setTimeout(() => {
-                    toast.classList.remove("show", "success", "failure");
-                }, 3000);
-            }
-        });
-    </script>
+
+</script>
 </body>
 </html>

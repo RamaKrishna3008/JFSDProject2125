@@ -11,7 +11,7 @@ public interface FacultyService
 {
 	public Faculty CheckFacultyLogin(String username,String pwd);
 	public String UpdateFacultyProfile(Faculty f);
-	public List<FacultyCourseMapping> findFacultyCoursesAndSections(int fid);
+	public List<FacultyCourseMapping> findFacultyCoursesAndSections(int fid, String acadmicYear, String offeredsem);
 	public List<StudentCourseMapping> findStudentsByFacultyId(int fid, int cid, int section);
 	public String AddMaterials(FacultyStudentCourseMaterials materials);
 

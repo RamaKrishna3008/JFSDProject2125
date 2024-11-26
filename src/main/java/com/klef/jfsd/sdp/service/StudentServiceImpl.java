@@ -53,9 +53,9 @@ public class StudentServiceImpl implements StudentService{
 	}
 
 	@Override
-	public List<Course> getCoursesForReg(String batch) 
+	public List<Course> getSectionsForReg(String batch,String ay,String sem) 
 	{
-		return facultyCourseMappingRepository.findByCourseBatch(batch);
+		return facultyCourseMappingRepository.getSectionsForReg(batch, ay, sem);
 	}
 	
 	
@@ -79,9 +79,9 @@ public class StudentServiceImpl implements StudentService{
 	}
 	
 	@Override
-	public List<StudentCourseMapping> viewStudentCourses() 
+	public List<StudentCourseMapping> viewStudentCourses(String academicYear,String offeredsem) 
 	{
-		return studentCourseMappingRepository.findAll();
+		return studentCourseMappingRepository.findStudentCourses(academicYear, offeredsem);
 	}
 	
 	@Override

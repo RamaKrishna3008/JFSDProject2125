@@ -5,7 +5,8 @@
 <html>
 
 <head>
-    <title>View All Courses</title>
+    <title>SHS University</title>
+    <link rel="icon" href="/images/university-icon.png">
     <style>
         /* Your Custom CSS */
         .navbar-toggle {
@@ -262,6 +263,9 @@
                     <th>COURSE TITLE</th>
                     <th>LTPS</th>
                     <th>CREDITS</th>
+                    <th>For Batch</th>
+                    <th>Academic Year</th>
+                    <th>Offered in Sem</th>
                 </tr>
             </thead>
             <tbody>
@@ -272,6 +276,9 @@
                         <td><c:out value="${course.coursetitle}" /></td>
                         <td><c:out value="${course.ltps}" /></td>
                         <td><c:out value="${course.credits}" /></td>
+                        <td><c:out value="${course.forBatch}" /></td>
+                        <td><c:out value="${course.academicYear}" /></td>
+                        <td><c:out value="${course.offeredsem}" /></td>
                     </tr>
                 </c:forEach>
             </tbody>

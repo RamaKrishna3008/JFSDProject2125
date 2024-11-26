@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Faculty</title>
+    <title>SHS University</title>
+    <link rel="icon" href="/images/university-icon.png">
     <style>
         .container {
             width: 400px;

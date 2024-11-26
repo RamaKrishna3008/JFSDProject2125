@@ -18,4 +18,6 @@ public interface StudentCourseMappingRepository extends JpaRepository<StudentCou
 	@Query("SELECT scm FROM StudentCourseMapping scm WHERE scm.faculty.id =?1 and scm.course.courseid=?2 and scm.section=?3")
 	  public List<StudentCourseMapping> findCourseAndSectionByFacultyId(int facultyId,int cid,int section);
 	
+	@Query("SELECT scm FROM StudentCourseMapping scm WHERE scm.course.academicYear = ?1 AND scm.course.offeredsem = ?2")
+	public List<StudentCourseMapping> findStudentCourses(String academicYear, String offeredsem);	
 }

@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>University</title>
+    <title>SHS University</title>
+    <link rel="icon" href="/images/university-icon.png">
     <link rel="stylesheet" href="style.css">
     <style>
      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
@@ -238,7 +239,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
             <div class="dropdown">
             <a>Course Mapping</a>
             <div class="dropdown-menu">
-                <a href="facultycoursemapping">Map Course to Faculty</a>
+                <a href="facultyCourseMappingHome">Map Course to Faculty</a>
                  <a href="viewfcoursemapping">View Faculty Course Mapping</a>
             </div>
         </div>

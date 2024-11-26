@@ -27,7 +27,7 @@ if (st == null) {
 	<!-- Vertical Navbar -->
 	<button class="nav-button" onclick="window.location.href='/Student/home'">Dashboard</button>
 	<button class="nav-button" onclick="window.location.href='/Student/profile'">Profile</button>
-	<button class="nav-button" onclick="window.location.href='/Student/ViewMyCourses'">Courses</button>
+	<button class="nav-button" onclick="window.location.href='/Student/ViewMyCoursesHome'">Courses</button>
 	<button class="nav-button">My CGPA</button>
 	<button class="nav-button">Attendance</button>
 	<button class="nav-button" onclick="window.location.href='/Logout'">Logout</button>

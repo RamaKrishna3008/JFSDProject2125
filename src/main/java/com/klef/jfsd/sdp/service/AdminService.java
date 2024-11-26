@@ -29,6 +29,7 @@ public interface AdminService
 	
 	//facultycoursemapping methods
 	
+	  public List<Course> viewCourseBySem(String ay, String sem);
 	  public List<Course> displayAllCourses();
 	  public String addcourse(Course c);
 	  
@@ -39,6 +40,7 @@ public interface AdminService
 	  public List<FacultyCourseMapping> displayFacultyCourseMapping();
 	  
 	  public long checkFacultyCourseMapping(Faculty f,Course c,int section);
+	
 	  
 	
 }

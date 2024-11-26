@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Session Expired</title>
+    <title>SHS University</title>
+    <link rel="icon" href="/images/university-icon.png">
     <style>
         body {
             font-family: Arial, sans-serif;

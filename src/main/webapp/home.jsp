@@ -3,91 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHS University - ERP </title>
+    <title>SHS University</title>
+    <link rel="icon" href="/images/university-icon.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         :root {
-            --bs-primary: #4a90e2;
-            --bs-secondary: #2c3e50;
-            --bs-light: #f8f9fa;
-            --bs-dark: #212529;
-        }
+    /* Expanded Color Palette */
+    --primary-color: #4a90e2;      /* Blue */
+    --secondary-color: #191919;    /* Soft Red */
+    --accent-color: #4ecdc4;       /* Teal */
+    --background-light: #f4f4f4;   /* Light Gray */
+    --text-color: #333333;
+    --gradient-primary: linear-gradient(135deg, #1d1e23, #1d1e23);
+    --gradient-secondary: linear-gradient(135deg, #3185fc, #3185fc);
+}
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        }
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: var(--background-light);
+    color: var(--text-color);
+}
 
-        .hero {
-            background: linear-gradient(135deg, var(--bs-primary), var(--bs-secondary));
-            position: relative;
-            overflow: hidden;
-        }
+.hero {
+    background: var(--gradient-primary);
+    position: relative;
+    overflow: hidden;
+    color: white;
+}
 
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at top right, rgba(255,255,255,0.2), transparent 50%);
-        }
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at top right, rgba(255,255,255,0.2), transparent 50%);
+}
 
-        .feature-card {
-            transition: all 0.3s ease;
-            transform: translateY(0);
-        }
+/* Colorful Feature Cards */
+.feature-card {
+    background: white;
+    border: none;
+    transition: all 0.4s ease;
+    transform: translateY(0);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
 
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 1rem 3rem rgba(0,0,0,.175) !important;
-        }
+.feature-card:hover {
+    transform: translateY(-15px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
 
-        .feature-icon {
-            transition: transform 0.3s ease;
-            color: var(--bs-primary);
-        }
+.feature-icon {
+    transition: all 0.4s ease;
+    color: var(--primary-color);
+}
 
-        .feature-card:hover .feature-icon {
-            transform: rotate(360deg);
-        }
+.feature-card:hover .feature-icon {
+    transform: rotate(360deg) scale(1.2);
+    color: var(--secondary-color);
+}
 
-    .carousel-inner img {
-        height: 500px; /* Adjust height as needed */
-        object-fit: cover;
+/* Colorful Buttons */
+.btn-custom {
+    background: var(--gradient-secondary);
+    color: white;
+    border: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(254, 202, 87, 0.4);
+}
+
+.btn-custom:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(254, 202, 87, 0.6);
+    color: white;
+}
+
+/* Carousel Enhancements */
+.carousel-indicators [data-bs-target] {
+    background-color: var(--primary-color);
+    opacity: 0.5;
+}
+
+.carousel-indicators .active {
+    background-color: var(--secondary-color);
+    opacity: 1;
+}
+
+.carousel-caption {
+    background: rgba(74, 144, 226, 0.7);
+    border-radius: 10px;
+    padding: 15px;
+}
+
+/* Navbar Styling */
+.navbar {
+    background: var(--gradient-primary) !important;
+}
+
+.navbar-brand {
+    color: white;
+    transition: transform 0.3s ease;
+}
+
+.navbar-brand:hover {
+    transform: scale(1.05);
+}
+
+/* Logo Animation */
+@keyframes colorPulse {
+    0%, 100% { 
+        filter: brightness(1);
+    }
+    50% { 
+        filter: brightness(1.2);
+    }
+}
+
+.navbar-brand img {
+    animation: colorPulse 3s ease-in-out infinite;
+    border-radius: 50%;
+}
+
+/* Responsive Typography */
+@media (max-width: 768px) {
+    .display-4 {
+        font-size: 2.5rem;
     }
 
-    .carousel-caption {
-        z-index: 2;
-        color: #fff;
-        text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+    .display-6 {
+        font-size: 1.75rem;
     }
+}
 
-    .carousel-item {
-        position: relative;
-    }
+/* Section Backgrounds */
+.bg-light {
+    background: linear-gradient(135deg, 
+        rgba(74, 144, 226, 0.1), 
+        rgba(78, 205, 196, 0.1)
+    ) !important;
+}
 
-    .carousel-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3));
-        z-index: 1;
-    }
+/* Floating Animation */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-25px); }
+}
 
-    .carousel-control-prev-icon,
-    .carousel-control-next-icon {
-        background-color: rgba(0, 0, 0, 0.5);
-        border-radius: 50%;
-        padding: 10px;
-    }
+.floating-element {
+    animation: float 4s ease-in-out infinite;
+    color: var(--secondary-color);
+}
 
-    .carousel-indicators [data-bs-target] {
-        background-color: #4a90e2;
-    }
+/* Smooth Scroll */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Additional Hover Effects */
+.nav-link {
+    position: relative;
+    color: white;
+    transition: color 0.3s ease;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 50%;
+    background-color: var(--secondary-color);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
 
     .carousel-indicators .active {
         background-color: #2c3e50;
@@ -113,6 +209,84 @@
         .floating-element {
             animation: float 4s ease-in-out infinite;
         }
+        /* Logo Styling */
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    transition: all 0.3s ease;
+}
+
+.navbar-brand img {
+    height: 40px;  /* Fixed height for consistent logo size */
+    width: 40px;   /* Fixed width to maintain aspect ratio */
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.navbar-brand:hover img {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+}
+
+.navbar-brand:hover {
+    color: var(--bs-primary);
+    text-decoration: none;
+}
+
+/* Responsive Logo Adjustments */
+@media (max-width: 576px) {
+    .navbar-brand {
+        font-size: 1.25rem;
+    }
+
+    .navbar-brand img {
+        height: 30px;
+        width: 30px;
+    }
+}
+
+/* Dark Mode Logo Enhancements */
+@media (prefers-color-scheme: dark) {
+    .navbar-brand {
+        color: #f0f0f0;
+    }
+
+    .navbar-brand img {
+        filter: brightness(0.9) contrast(1.2);
+    }
+}
+
+/* Logo Animation */
+@keyframes logoGlow {
+    0%, 100% { 
+        box-shadow: 0 4px 6px rgba(74, 144, 226, 0.2);
+    }
+    50% { 
+        box-shadow: 0 6px 10px rgba(74, 144, 226, 0.4);
+    }
+}
+
+.navbar-brand img.logo-animated {
+    animation: logoGlow 3s ease-in-out infinite;
+}
+
+/* High Contrast and Accessibility */
+.navbar-brand img.high-contrast {
+    filter: contrast(1.2) brightness(1.1);
+}
+
+/* Print Optimization */
+@media print {
+    .navbar-brand img {
+        filter: grayscale(100%);
+    }
+}
     </style>
 </head>
 <body>
@@ -120,8 +294,8 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
         <div class="container">
             <a class="navbar-brand fw-bold" href="login">
-                <i class="fas fa-graduation-cap me-2"></i>SHS University
-            </a>
+   				 <img src="/images/university-icon.png" class="logo-animated" />SHS University
+				</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>

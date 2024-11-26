@@ -3,111 +3,221 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Materials</title>
+    <title>SHS University</title>
+    <link rel="icon" href="/images/university-icon.png">
     <style>
-        .container {
-            width: 400px;
-            padding: 20px;
-            background-color: white;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            margin: auto;
-        }
+       /* Global Reset and Modern Design */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        .container h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #333;
-        }
+body {
+    font-family: 'Inter', 'Arial', sans-serif;
+    background-color: #f4f7f6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    line-height: 1.6;
+    color: #333;
+}
 
-        /* Updated Drop Zone Styles */
-        .drop-zone {
-            width: 100%;
-            height: 150px;
-            margin: 20px 0;
-            border: 2px dashed #ccc;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background-color: #f9f9f9;
-        }
+.container {
+    width: 100%;
+    max-width: 500px;
+    padding: 30px;
+    background-color: white;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    margin: 20px;
+    transition: all 0.3s ease;
+}
 
-        .drop-zone:hover {
-            border-color: #666;
-            background-color: #f1f1f1;
-        }
+.container:hover {
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+}
 
-        .drop-zone.dragover {
-            border-color: #2196F3;
-            background-color: rgba(33, 150, 243, 0.1);
-        }
+.container h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #2c3e50;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 10px;
+}
 
-        .drop-zone-text {
-            text-align: center;
-            color: #666;
-            font-size: 14px;
-        }
+.container h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 60px;
+    height: 3px;
+    background-color: #3498db;
+    transform: translateX(-50%);
+}
 
-        input[type="file"] {
-            display: none;
-        }
+/* Drop Zone Styling with Enhanced Interactivity */
+.drop-zone {
+    width: 100%;
+    height: 200px;
+    margin: 20px 0;
+    border: 2px dashed #a0aec0;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: #f9fafb;
+    position: relative;
+    overflow: hidden;
+}
 
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #333;
-        }
+.drop-zone::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 10px,
+        rgba(33, 150, 243, 0.05) 10px,
+        rgba(33, 150, 243, 0.05) 20px
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
 
-        input[type="text"],
-        input[type="email"],
-        input[type="password"],
-        input[type="number"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
+.drop-zone:hover::before {
+    opacity: 1;
+}
 
-        .button-group {
-            display: flex;
-            justify-content: space-between;
-        }
+.drop-zone:hover {
+    border-color: #3498db;
+    background-color: rgba(52, 152, 219, 0.05);
+}
 
-        input[type="submit"],
-        input[type="reset"] {
-            width: 48%;
-            padding: 10px;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
+.drop-zone.dragover {
+    border-color: #2ecc71;
+    background-color: rgba(46, 204, 113, 0.1);
+}
 
-        input[type="submit"] {
-            background-color: #4CAF50;
-        }
+.drop-zone-text {
+    text-align: center;
+    color: #718096;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
 
-        input[type="submit"]:hover {
-            background-color: #45a049;
-        }
+.drop-zone:hover .drop-zone-text {
+    color: #2c3e50;
+}
 
-        input[type="reset"] {
-            background-color: #f44336;
-        }
+/* Hide File Input */
+input[type="file"] {
+    display: none;
+}
 
-        input[type="reset"]:hover {
-            background-color: #da190b;
-        }
+/* Label Styling */
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: #4a5568;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
 
-        input[readonly] {
-            background-color: #f5f5f5;
-            cursor: not-allowed;
-        }
+label:hover {
+    color: #3498db;
+}
+
+/* Input Fields */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    font-size: 16px;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+input[readonly] {
+    background-color: #f8f9fa;
+    cursor: not-allowed;
+    color: #6c757d;
+}
+
+/* Button Styling */
+.button-group {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+input[type="submit"] {
+    width: 100%;
+    padding: 14px;
+    color: white;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+input[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+    background: linear-gradient(135deg, #2980b9, #3498db);
+}
+
+/* Responsive Adjustments */
+@media screen and (max-width: 600px) {
+    .container {
+        width: 95%;
+        padding: 20px;
+        margin: 10px;
+    }
+
+    .drop-zone {
+        height: 150px;
+    }
+}
+
+/* Accessibility and Print Styles */
+@media print {
+    body {
+        background-color: white;
+    }
+
+    .container {
+        box-shadow: none;
+        border: 1px solid #ccc;
+    }
+}
     </style>
 </head>
 <body>

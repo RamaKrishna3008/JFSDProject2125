@@ -10,7 +10,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>ERP</title>
+    <title>SHS University</title>
+    <link rel="icon" href="/images/university-icon.png">
     <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
@@ -228,10 +229,8 @@ h3 u {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-#myTable td a:nth-child(1) { background-color: #4CAF50; color: white; }
-#myTable td a:nth-child(2) { background-color: #2196F3; color: white; }
-#myTable td a:nth-child(4) { background-color: #f44336; color: white; }
-#myTable td a:nth-child(3) { background-color: #FF9800; color: white; }
+#myTable td a:nth-child(1) { background-color: #2196F3; color: white; }
+#myTable td a:nth-child(2) { background-color: #FF9800; color: white; }
 
 #myTable td a:hover {
     transform: translateY(-2px);
@@ -262,22 +261,37 @@ h3 u {
     }
 }
 .action-links {
-    padding: 8px !important;
+    padding: 4px !important;
 }
 
 .action-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 6px;
+    gap: 8px;
     align-items: center;
 }
 
 .action-grid a {
-    font-size: 0.8rem;
-    padding: 6px 10px;
+    font-size: 0.7rem;
+    padding: 4px 8px;
     text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+    .action-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+    }
+    
+    .action-grid a {
+        font-size: 0.6rem;
+        padding: 3px 6px;
+    }
+}
 /* Toast Notification */
 .toast {
     position: fixed;
@@ -392,10 +406,8 @@ h3 u {
 <th>Father Name</th>
 <th>Mother Name</th>
 <th>Contact No</th>
-<th>Address</th>
 <th>Status</th>
-<th>Creation Time</th>
-<th>Updated Time</th>
+<th>Registration Status</th>
 <th>Update Status</th>
 </tr>
 
@@ -409,16 +421,12 @@ h3 u {
 <td> <c:out value="${student.fatherName}"></c:out>   </td>
 <td> <c:out value="${student.motherName}"></c:out>   </td>
 <td> <c:out value="${student.contact}"></c:out>   </td>
-<td> <c:out value="${student.address}"></c:out>   </td>
 <td> <c:out value="${student.status}"></c:out>   </td>
-<td> <c:out value="${student.createdAt}"></c:out>   </td>
-<td> <c:out value="${student.updatedAt}"></c:out>   </td>
+<td> <c:out value="${student.registarationStatus}"></c:out>   </td>
 <td class="action-links">
     <div class="action-grid">
-        <a href="UpdateStudent?id=${student.id}">Update</a>
-        <a href="ViewStudentById?id=${student.id}">View</a>
-        <a href="UpdateStudentRegistartionStatus?id=${student.id}">Permit</a>
-        <a href="DeleteStudent?id=${student.id}">Delete</a>
+        <a href="ViewStudentById?id=${student.id}">View/Update/Delete</a>
+        <a href="UpdateStudentRegistartionStatus?id=${student.id}">Permit Registration</a>
     </div>
 </td>
 

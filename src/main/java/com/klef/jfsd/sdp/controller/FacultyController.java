@@ -103,14 +103,25 @@ public class FacultyController
 		
 	}
 	
+	@GetMapping("viewFacultyMappedCoursesHome")
+	public ModelAndView viewFacultyMappedCoursesHome()
+	{
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("ViewFacultyMappedCoursesHome");
+		return mv;
+	}
+	
 	@GetMapping("viewFacultyMappedCourses")
 	public ModelAndView viewFacultyMappedCourses(HttpServletRequest request)
 	{
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("viewFacultyMappedCourses");
+		
+		String ay=request.getParameter("academicyear");
+		String sem =request.getParameter("sem");
 		HttpSession session = request.getSession(); 
 		Faculty f = (Faculty)session.getAttribute("faculty");
-		mv.addObject("fcmdata", facultyService.findFacultyCoursesAndSections(f.getId()));
+		mv.addObject("fcmdata", facultyService.findFacultyCoursesAndSections(f.getId(),ay,sem));
 		
 		return mv;
 		

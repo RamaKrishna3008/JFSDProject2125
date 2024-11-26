@@ -13,7 +13,8 @@ Faculty f = (Faculty)session.getAttribute("faculty");
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>University</title>
+    <title>SHS University</title>
+    <link rel="icon" href="/images/university-icon.png">
     <style>
          @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
@@ -198,7 +199,7 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
         <div class="dropdown">
             <a>Courses</a>
             <div class="dropdown-menu">
-                <a href="viewFacultyMappedCourses">View Courses</a>
+                <a href="viewFacultyMappedCoursesHome">View Courses</a>
             </div>
         </div>
         <div class="dropdown">

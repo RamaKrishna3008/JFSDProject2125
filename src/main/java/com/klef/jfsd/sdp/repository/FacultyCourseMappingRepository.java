@@ -15,11 +15,12 @@ public interface FacultyCourseMappingRepository  extends JpaRepository<FacultyCo
 	@Query("SELECT COUNT(fcm) FROM FacultyCourseMapping fcm where fcm.faculty = ?1 and fcm.course = ?2 AND fcm.section = ?3")
 	  public long checkfcoursemapping(Faculty faculty,Course course,int section);
 	
-	@Query("SELECT fcm FROM FacultyCourseMapping fcm WHERE fcm.faculty.id =?1")
-	  public List<FacultyCourseMapping> findCourseAndSectionByFacultyId(int facultyId);
+	@Query("SELECT fcm FROM FacultyCourseMapping fcm WHERE fcm.faculty.id = ?1 AND fcm.course.academicYear = ?2 AND fcm.course.offeredsem = ?3")
+	public List<FacultyCourseMapping> findCourseAndSectionByFacultyIdAndAYAndSem(int facultyId, String academicYear, String offeredsem);
+
 	
-	@Query("SELECT DISTINCT fcm.course FROM FacultyCourseMapping fcm WHERE fcm.course.ForBatch = ?1")
-	public List<Course> findByCourseBatch(String ForBatch);
+	@Query("SELECT DISTINCT fcm.course FROM FacultyCourseMapping fcm WHERE fcm.course.forbatch = ?1 and fcm.course.academicYear=?2 and fcm.course.offeredsem=?3")
+	public List<Course> getSectionsForReg(String ForBatch,String academicYear,String sem);
 
 	@Query("select fcm FROM FacultyCourseMapping fcm WHERE fcm.course.courseid=?1")
 	  public List<FacultyCourseMapping> findSectionByCourseId(int courseid);

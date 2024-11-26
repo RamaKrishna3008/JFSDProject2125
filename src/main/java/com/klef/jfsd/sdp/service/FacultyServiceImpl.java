@@ -58,9 +58,9 @@ public class FacultyServiceImpl implements FacultyService
 	}
 	
 	@Override
-	public List<FacultyCourseMapping> findFacultyCoursesAndSections(int fid)
+	public List<FacultyCourseMapping> findFacultyCoursesAndSections(int fid,String acadmicYear,String offeredsem)
 	{
-		return facultyCourseMappingRepository.findCourseAndSectionByFacultyId(fid);
+		return facultyCourseMappingRepository.findCourseAndSectionByFacultyIdAndAYAndSem(fid, acadmicYear, offeredsem);
 	}
 	
 	@Override

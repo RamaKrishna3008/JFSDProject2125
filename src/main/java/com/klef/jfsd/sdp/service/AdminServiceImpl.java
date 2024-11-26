@@ -141,7 +141,12 @@ public class AdminServiceImpl implements AdminService
 	public List<Course> displayAllCourses() {
 		return  courseRepository.findAll();
 	}
-
+	
+	@Override
+	public  List<Course> viewCourseBySem(String ay,String sem) {
+		return courseRepository.findByAcademicYearAndOfferedsem(ay, sem);
+	}
+	
 	@Override
 	public Faculty displayFacultyById(int fid) {
 		return facultyRepository.findById(fid).get();

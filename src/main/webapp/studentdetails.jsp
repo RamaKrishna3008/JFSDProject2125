@@ -11,7 +11,8 @@ if (st == null) {
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Student Details</title>
+<title>SHS University</title>
+    <link rel="icon" href="/images/university-icon.png">
 <link rel="stylesheet" type="text/css" href="/Styles/StudentNavBar.css">
 </head>
 <body>

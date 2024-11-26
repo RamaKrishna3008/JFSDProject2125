@@ -29,14 +29,21 @@ public class Course
   private double credits;
   
   @Column(nullable = false)
-  private String ForBatch;
+  private String forbatch;
+  
+  @Column(nullable = false)
+  private String academicYear;
+  
+  @Column(nullable = false)
+  private String offeredsem;
+  
 
 public String getForBatch() {
-	return ForBatch;
+	return forbatch;
 }
 
-public void setForBatch(String forBatch) {
-	ForBatch = forBatch;
+public void setForBatch(String forbatch) {
+	this.forbatch = forbatch;
 }
 
 public int getCourseid() {
@@ -77,5 +84,21 @@ public double getCredits() {
 
 public void setCredits(double credits) {
 	this.credits = credits;
+}
+
+public String getAcademicYear() {
+	return academicYear;
+}
+
+public void setAcademicYear(String academicYear) {
+	this.academicYear = academicYear;
+}
+
+public String getOfferedsem() {
+	return offeredsem;
+}
+
+public void setOfferedsem(String offeredsem) {
+	this.offeredsem = offeredsem;
 }
 }

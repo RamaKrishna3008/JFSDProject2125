@@ -4,7 +4,8 @@
 
 <html> 
 <head> 
-<title>Internals</title>
+<title>SHS University</title>
+    <link rel="icon" href="/images/university-icon.png">
 <style>
   body {
     background-color: lightgrey;

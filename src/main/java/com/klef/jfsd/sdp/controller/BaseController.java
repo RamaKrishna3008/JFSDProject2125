@@ -1,20 +1,20 @@
 package com.klef.jfsd.sdp.controller;
 
-import java.util.List;
+import java.util.Base64;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.klef.jfsd.sdp.model.Admin;
 import com.klef.jfsd.sdp.model.Faculty;
-import com.klef.jfsd.sdp.model.FacultyCourseMapping;
 import com.klef.jfsd.sdp.model.Student;
 import com.klef.jfsd.sdp.service.AdminService;
+import com.klef.jfsd.sdp.service.CaptchaService;
 import com.klef.jfsd.sdp.service.FacultyService;
 import com.klef.jfsd.sdp.service.StudentService;
 
@@ -32,6 +32,9 @@ public class BaseController
 	
 	@Autowired
 	private StudentService studentService;
+	
+	@Autowired
+	private CaptchaService captchaService;
 	
 	@GetMapping("/")
 	public ModelAndView home()
@@ -64,6 +67,18 @@ public class BaseController
 		ModelAndView mv=new ModelAndView();
 		String username = request.getParameter("username");
 		String pwd = request.getParameter("password");
+		
+		String Captcha = request.getParameter("Captcha");
+		
+		boolean isCaptchaValid = captchaService.validateCaptcha(Captcha);
+
+	    if (!isCaptchaValid) 
+	    {
+	        mv.addObject("message", "Invalid Captcha. Please try again.");
+	        mv.setViewName("redirect:/login");
+	        return mv;
+	    }
+	    else {
 		Admin a = adminService.checkAdminLogin(username, pwd);
 		Faculty f = facultyService.CheckFacultyLogin(username, pwd);
 		Student st = studentService.studentLogin(username, pwd);
@@ -118,6 +133,28 @@ public class BaseController
 		}
 		
 		return mv;
+	    }
 	}
+	
+	
+    
+    @GetMapping("/getcaptcha/{length}")
+    @ResponseBody
+    public String getCaptcha(@PathVariable("length") int captchaLength)
+    {
+    	
+    	return Base64.getEncoder().encodeToString(captchaService.generateCaptcha(captchaLength));
+    }
+
+
+@PostMapping("/validate")
+public String validateCaptcha(HttpServletRequest request) {
+	String captchaInput = request.getParameter("Captcha");
+    boolean isValid = captchaService.validateCaptcha(captchaInput);
+    if(isValid)
+    	return "Verified";
+    else
+    	return "Wrong Captcha";
+}
 	
 }

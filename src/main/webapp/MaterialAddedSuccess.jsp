@@ -2,7 +2,8 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Added Successfully</title>
+    <title>SHS University</title>
+    <link rel="icon" href="/images/university-icon.png">
     <style>
         body {
             display: flex;
@@ -34,7 +35,7 @@
     <h1>Course Material Added Successfully!</h1>
     <div class="message">
     </div>
-    <a href="viewFacultyMappedCourses">Back</a>
+    <a href="Home">Back</a>
    
 </body>
 </html>

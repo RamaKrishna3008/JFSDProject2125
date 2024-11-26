@@ -7,7 +7,8 @@
 <html lang="en">
 
 <head>
-    <title>ERP</title>
+    <title>SHS University</title>
+    <link rel="icon" href="/images/university-icon.png">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
@@ -154,46 +155,113 @@ h3 u {
         margin-left: 0;
     }
 }
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh; /* This ensures vertical centering as well */
-}
-
-        .card {
+.card {
     background-color: #ffffff;
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 30px;
+    padding: 20px;
     max-width: 400px;
     width: 100%;
     text-align: left;
     position: relative;
-    margin: 0 auto; /* This centers the card horizontally */
+    margin: 0 auto;
 }
 
-        .card h3 {
-            text-align: center;
-            color: #333333;
-            margin-top: 80px;
-            margin-bottom: 30px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #f0f0f0;
-        }
+.action-links {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+}
 
-        .profile-image-container {
-            position: absolute;
-            top: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            border: 3px solid #ffffff;
-        }
+.action-links a {
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.action-links a:first-child {
+    background-color: #2196F3;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.action-links a:last-child {
+    background-color: #f44336;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.action-links a:first-child:hover {
+    background-color: #1976D2;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+.action-links a:last-child:hover {
+    background-color: #d32f2f;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 480px) {
+    .action-links {
+        top: 10px;
+        right: 10px;
+        gap: 5px;
+    }
+    
+    .action-links a {
+        padding: 4px 8px;
+        font-size: 0.7rem;
+    }
+}
+
+.profile-image-container {
+    position: absolute;
+    top: 55px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 3px solid #ffffff;
+}
+
+.card h3 {
+    text-align: center;
+    color: #333333;
+    margin-top: 120px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+@media (max-width: 480px) {
+    .card {
+        padding: 15px;
+        margin: 60px 10px 10px 10px;
+    }
+    
+    .action-links {
+        top: 10px;
+        right: 10px;
+        gap: 5px;
+    }
+    
+    .action-links a {
+        font-size: 0.8rem;
+    }
+}
+
+
 
         .profile-image-container img {
             width: 100%;
@@ -257,12 +325,18 @@ h3 u {
     </div>
 
     <div class="card">
-        <div class="profile-image-container">
-            <img alt="profilepic" src="/Admin/displaystudentimage?id=${student.id}">
-        </div><br><br>
+    <div class="action-links">
+        <a href="UpdateStudent?id=${student.id}">Update</a>
+        <a href="DeleteStudent?id=${student.id}">Delete</a>
+        
+    </div>
+    <br>
+    <div class="profile-image-container">
+        <img alt="profilepic" src="/Admin/displaystudentimage?id=${student.id}">
+    </div>
         <h3><u>View Student By ID</u></h3>
-        <p><span class="label">Academic Year:</span> <span class="value"><c:out value="${student.batchname}" /></span></p>
         <p><span class="label">ID:</span> <span class="value"><c:out value="${student.id}" /></span></p>
+        <p><span class="label">Academic Year:</span> <span class="value"><c:out value="${student.batchname}" /></span></p>
         <p><span class="label">Name:</span> <span class="value"><c:out value="${student.name}" /></span></p>
         <p><span class="label">Father's Name:</span> <span class="value"><c:out value="${student.fatherName}" /></span></p>
         <p><span class="label">Mother's Name:</span> <span class="value"><c:out value="${student.motherName}" /></span></p>
@@ -270,6 +344,10 @@ h3 u {
         <p><span class="label">Contact No:</span> <span class="value"><c:out value="${student.contact}" /></span></p>
         <p><span class="label">Status:</span> <span class="value"><c:out value="${student.status}" /></span></p>
         <p><span class="label">Registartion Status:</span> <span class="value"><c:out value="${student.registarationStatus}" /></span></p>
+        <p><span class="label">Creation Time:</span> <br><span class="value"><c:out value="${student.createdAt}" /></span></p>
+        <p><span class="label">Last Updated Time:</span> <br><span class="value"><c:out value="${student.updatedAt}" /></span></p>
+        
+        
     </div>
 
     <script>
