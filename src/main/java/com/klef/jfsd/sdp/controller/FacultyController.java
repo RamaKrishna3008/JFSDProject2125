@@ -4,12 +4,19 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Blob;
+import java.time.LocalDate;
+import java.time.Year;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.rowset.serial.SerialBlob;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,12 +25,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.klef.jfsd.sdp.model.Attendance;
+import com.klef.jfsd.sdp.model.Course;
 import com.klef.jfsd.sdp.model.Faculty;
 import com.klef.jfsd.sdp.model.FacultyStudentCourseMaterials;
+import com.klef.jfsd.sdp.model.Student;
 import com.klef.jfsd.sdp.model.StudentCourseMapping;
 import com.klef.jfsd.sdp.service.AdminService;
 import com.klef.jfsd.sdp.service.FacultyService;
 
+import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
@@ -37,7 +48,8 @@ public class FacultyController
 	@Autowired
 	AdminService service;
 	
-	
+	@Autowired
+	private JavaMailSender mailSender;	
 	
 	
 	
@@ -76,7 +88,6 @@ public class FacultyController
 	            byte[] bytes = file.getBytes();
 	            blob = new SerialBlob(bytes);
 	        } else {
-	            // Load the default image file from server
 	            Path defaultImagePath = Paths.get("src/main/webapp/images/default-profile-picture.jpg");
 	            byte[] defaultImageBytes = Files.readAllBytes(defaultImagePath);
 	            blob = new SerialBlob(defaultImageBytes);
@@ -138,18 +149,148 @@ public class FacultyController
 		
 	}
 	
-	@GetMapping("GetStudentsByCourses")
+	@GetMapping("Attendance/View")
 	public ModelAndView GetStudentsByCourses(@RequestParam int fid,@RequestParam int cid,@RequestParam int section)
 	{
 		ModelAndView mv = new ModelAndView();
 		List<StudentCourseMapping> scm = facultyService.findStudentsByFacultyId(fid, cid, section);
-		scm.sort(Comparator.comparing(mapping -> mapping.getStudent().getId()));
-		mv.addObject("slist",scm);
-		if(scm!=null) {
+		
+		if(scm!=null && !scm.isEmpty()) 
+		{
+			scm.sort(Comparator.comparing(mapping -> mapping.getStudent().getId()));
+			mv.addObject("slist",scm);
 			mv.addObject("Course",scm.get(0).getCourse());
+			mv.addObject("section", scm.get(0).getSection());
 		}
-		mv.setViewName("GetStudentsByCoursesFaculty");
+		else
+		{
+			mv.addObject("msg","No Students Available At this Moment");
+		}
+		mv.setViewName("Faculty_AttendanceRegister");
 		return mv;
+	}
+	
+
+
+
+
+	private void sendAbsenceNotificationEmail(Student student, Course course, int section, String date, int hour) {
+	    try {
+	        String parentEmail = student.getParentEmail();
+	        
+	        MimeMessage message = mailSender.createMimeMessage();
+	        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+	        
+	        helper.setFrom("your-university-email@example.com");
+	        helper.setTo(parentEmail);
+	        helper.setSubject("Absence Notification - " + student.getName() + " (ID: " + student.getId() + ")");
+	        
+	        String emailContent = createAbsenceEmailContent(student, course, section, date, hour);
+	        
+	        helper.setText(emailContent, true);
+	        
+	        mailSender.send(message);
+	        
+	        System.out.println("Absence notification email sent to parent of " + student.getName());
+	    } catch (Exception e) {
+	        System.err.println("Error sending absence notification email: " + e.getMessage());
+	        e.printStackTrace();
+	    }
+	}
+
+	private String createAbsenceEmailContent(Student student, Course course, int section, String date, int hour) {
+	    return "<!DOCTYPE html>" +
+	    "<html lang='en'>" +
+	    "<head>" +
+	    " <meta charset='UTF-8'>" +
+	    " <style>" +
+	    " body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }" +
+	    " .container { max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f4f4f4; }" +
+	    " .header { background-color: #1a237e; color: white; padding: 20px; text-align: center; }" +
+	    " .content { background-color: white; padding: 20px; }" +
+	    " .footer { text-align: center; color: #777; margin-top: 20px; }" +
+	    " </style>" +
+	    "</head>" +
+	    "<body>" +
+	    " <div class='container'>" +
+	    " <div class='header'>" +
+	    " <h1>SHS University</h1>"+
+	    " <h3>Student Absence Notification</h3>" +
+	    " </div>" +
+	    " <div class='content'>" +
+	    " <h2>Dear Parent,</h2>" +
+	    " <p>This is to inform you that your child has been marked absent:</p>" +
+	    " <table>" +
+	    " <tr><td><strong>Student Name:</strong></td><td>" + student.getName() + "</td></tr>" +
+	    " <tr><td><strong>Student ID:</strong></td><td>" + student.getId() + "</td></tr>" +
+	    " <tr><td><strong>Course:</strong></td><td>" + course.getCoursetitle() + "</td></tr>" +
+	    " <tr><td><strong>Section:</strong></td><td>" + section + "</td></tr>" +
+	    " <tr><td><strong>Date:</strong></td><td>" + date + "</td></tr>" +
+	    " <tr><td><strong>Hour:</strong></td><td>" + hour + "</td></tr>" +
+	    " </table>" +
+	    " <p>Please ensure your child maintains regular attendance.</p>" +
+	    " </div>" +
+	    " <div class='footer'>" +
+	    " <p>© " + Year.now().getValue() + " SHS University. All rights reserved.</p>" +
+	    " </div>" +
+	    " </div>" +
+	    "</body>" +
+	    "</html>"; 
+	}
+
+	@PostMapping("Attendance/Post")
+	public ModelAndView PostAttendance(HttpServletRequest request) {
+	    ModelAndView mv = new ModelAndView();
+
+	    HttpSession session = request.getSession();
+	    Faculty f = (Faculty) session.getAttribute("faculty");
+	    int cid = Integer.parseInt(request.getParameter("courseId"));
+	    int section = Integer.parseInt(request.getParameter("section"));
+	    Course c = service.displayCourseById(cid);
+
+	    List<StudentCourseMapping> scm = facultyService.findStudentsByFacultyId(f.getId(), c.getCourseid(), section);
+	    scm.sort(Comparator.comparing(mapping -> mapping.getStudent().getId()));
+
+	    Map<Integer, Attendance> map = new HashMap<Integer, Attendance>();
+
+	    for (int i = 0; i < scm.size(); i++) {
+	        String[] selectedHours = request.getParameterValues("hours");
+
+	        for (String hour : selectedHours) {
+	            Attendance att = new Attendance();
+	            att.setStudent(scm.get(i).getStudent());
+	            att.setCourse(c);
+	            att.setSection(section);
+
+	            att.setHour(Integer.parseInt(hour));
+
+	            String present = request.getParameter(Integer.toString(i));
+	            att.setPresent(!("true".equals(present)));
+
+	            LocalDate today = LocalDate.now();
+	            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	            String formattedDate = today.format(formatter);
+	            att.setDate(formattedDate);
+
+	            if (!att.isPresent()) {
+	                sendAbsenceNotificationEmail(
+	                    scm.get(i).getStudent(), 
+	                    c, 
+	                    section, 
+	                    formattedDate, 
+	                    Integer.parseInt(hour)
+	                );
+	            }
+
+	            System.out.println(selectedHours + present + formattedDate);
+	            map.put(i, att);
+	        }
+	    }
+	    
+	    String msg = facultyService.PostAttendance(map);
+	    mv.addObject("message", msg);
+	    mv.setViewName("redirect:/Faculty/viewFacultyMappedCoursesHome");
+	    return mv;
 	}
 	
 	@GetMapping("AddStudentInternals")
@@ -157,15 +298,53 @@ public class FacultyController
 	{
 		ModelAndView mv = new ModelAndView();
 		List<StudentCourseMapping> scm = facultyService.findStudentsByFacultyId(fid, cid, section);
-		scm.sort(Comparator.comparing(mapping -> mapping.getStudent().getId()));
-		mv.addObject("slist",scm);
-		if(scm!=null) {
+		if(scm!=null && !scm.isEmpty()) 
+		{
+			scm.sort(Comparator.comparing(mapping -> mapping.getStudent().getId()));
+			mv.addObject("slist",scm);
 			mv.addObject("Course",scm.get(0).getCourse());
+			mv.addObject("section", scm.get(0).getSection());
+		}
+		else
+		{
+			mv.addObject("msg","No Students Available At this Moment");
 		}
 		mv.setViewName("FacultyAddingStudentInternals");
 		return mv;
 	}
 	
+	@PostMapping("AddStudentInternals/Post")
+	public ModelAndView AddStudentInternalsPosting(HttpServletRequest request) {
+	    ModelAndView mv = new ModelAndView();
+
+	    HttpSession session = request.getSession();
+	    Faculty f = (Faculty) session.getAttribute("faculty");
+	    int cid = Integer.parseInt(request.getParameter("courseId"));
+	    int section = Integer.parseInt(request.getParameter("section"));
+
+
+	    List<StudentCourseMapping> scmList = facultyService.findStudentsByFacultyId(f.getId(), cid, section);
+
+	    scmList.sort(Comparator.comparing(mapping -> mapping.getStudent().getId()));
+
+	    for (int i = 0; i < scmList.size(); i++) {
+	        StudentCourseMapping scm = scmList.get(i);
+
+	        int studentInternals = Integer.parseInt(request.getParameter(Integer.toString(i)));
+	        if(scm.getStudentInternals() == -1) 
+	        {
+	        scm.setStudentInternals(studentInternals);
+
+	        facultyService.UpdateInternals(scm);
+	        }
+	    }
+
+	    mv.addObject("message", "Internals updated successfully!");
+	    mv.setViewName("redirect:/Faculty/viewFacultyMappedCoursesHome");
+
+	    return mv;
+	}
+
 	@GetMapping("AddCourseMaterials")
 	public ModelAndView AddCourseMaterials(@RequestParam int cid,@RequestParam int section)
 	{
@@ -194,9 +373,11 @@ public class FacultyController
 		materials.setMaterial(blob);
 		materials.setFilename(filename);
 		
-		facultyService.AddMaterials(materials);
-		mv.setViewName("MaterialAddedSuccess");
-		mv.addObject("message","success");
+		String msg = facultyService.AddMaterials(materials);
+		mv.addObject("cid",cid);
+		mv.addObject("section",section);
+		mv.addObject("message",msg);
+		mv.setViewName("redirect:/Faculty/AddCourseMaterials");
 		} catch (Exception e) {
 	        e.printStackTrace();
 	    }

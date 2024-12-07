@@ -288,6 +288,147 @@ body, html {
     .toast.show {
         animation: none;
     }
+    
+}
+
+
+        /* Modal Styles with Improved Design */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    z-index: 9998;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 400px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(245,245,245,0.95) 100%);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1), 0 5px 15px rgba(0,0,0,0.05);
+    backdrop-filter: blur(15px);
+    z-index: 9999;
+    border: 1px solid rgba(255,255,255,0.2);
+    animation: slideUp 0.4s ease-out;
+}
+
+.modal-header {
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(44,62,80,0.1);
+}
+
+.modal input {
+    width: 100%;
+    padding: 12px;
+    margin: 15px 0;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background-color: #f9f9f9;
+}
+
+.modal input:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(52,152,219,0.1);
+}
+
+.modal button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(45deg, #2c3e50 0%, #3498db 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 15px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+.modal button:hover {
+    background: linear-gradient(45deg, #34495e 0%, #2980b9 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.modal button:last-child {
+    background: linear-gradient(45deg, #95a5a6 0%, #7f8c8d 100%);
+    margin-top: 10px;
+}
+
+.modal button:last-child:hover {
+    background: linear-gradient(45deg, #7f8c8d 0%, #636363 100%);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { 
+        opacity: 0; 
+        transform: translate(-50%, -40%);
+    }
+    to { 
+        opacity: 1; 
+        transform: translate(-50%, -50%);
+    }
+}
+
+/* Responsive Adjustments */
+@media screen and (max-width: 480px) {
+    .modal {
+        width: 95%;
+        padding: 20px;
+    }
+    
+    .modal-header {
+        font-size: 18px;
+    }
+    
+    .modal input {
+        padding: 10px;
+        font-size: 14px;
+    }
+}
+.forgot-password-btn {
+    background: none;
+    border: none;
+    color: #2c3e50;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 0;
+    margin: 10px 0;
+    align-self: flex-start;
+    transition: color 0.3s ease;
+}
+
+.forgot-password-btn:hover {
+    color: #3498db;
 }
     </style>
 </head>
@@ -306,14 +447,16 @@ body, html {
     				<input type="text" id="username" name="username" placeholder="Username" required>
     				<input type="password" id="password" name="password" placeholder="Password" required>
     			<div class="captcha-container">
-       			 <img id="captcha" alt="error" src=""/>
-      			  <input type="text" name="Captcha" placeholder="Enter Captcha" required="required">
+       			 <img id="captcha" alt="error" onclick="loadcaptcha()" src=""/>
+      			  <input type="text" name="Captcha" placeholder="Enter Captcha"  required="required">
     				</div>
-    				<input type="submit" value="Login">
-				</form>
+                    <button type="button" class="forgot-password-btn" onclick="openForgotPasswordModal()">Forgot Password?</button>
+                    <input type="submit" value="Login">
+                </form>
             </div>
         </div>
     </div>
+    
     <div id="toast" class="toast"></div>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -322,16 +465,102 @@ body, html {
             if (message) {
                 const toast = document.getElementById("toast");
                 toast.textContent = message;
-                
-               
-                    toast.classList.add("show", "failure");
-                
+                if (message.includes("Password Reset Success")) {
+                    toast.classList.add("show", "success");
+                } else {
+                    toast.classList.add("show", "failure"); 
+                }
+
                 setTimeout(() => {
-                    toast.classList.remove("show","failure");
+                    toast.classList.remove("show", "success", "failure");
                 }, 3000);
             }
         });
     </script>
+
+    <!-- Modals -->
+    <div id="forgotPasswordModal" class="modal">
+        <div class="modal-header">Forgot Password</div>
+        <input type="text" id="forgotUsername" placeholder="Enter your Username">
+        <button onclick="sendOtp()">Send OTP</button>
+        <button onclick="closeModal('forgotPasswordModal')">Close</button>
+    </div>
+    <div id="verifyOtpModal" class="modal">
+        <div class="modal-header">Verify OTP</div>
+        <input type="text" id="otpInput" placeholder="Enter the OTP">
+        <button onclick="verifyOtp()">Verify OTP</button>
+        <button onclick="closeModal('verifyOtpModal')">Close</button>
+    </div>
+    <div id="modalOverlay" class="modal-overlay"></div>
+
+    <script>
+    function sendOtp() {
+        const username = document.getElementById('forgotUsername').value;
+        if (!username) {
+            alert('Please enter your username.');
+            return;
+        }
+
+        fetch('/sendOtp?username=' + encodeURIComponent(username), {
+            method: 'POST'
+        })
+        .then(response => {
+            if (!response.ok) {
+                if (response.status === 404) {
+                    throw new Error('User not found. Please check your username.');
+                } else {
+                    throw new Error('An error occurred. Please try again.');
+                }
+            }
+            return response.text();
+        })
+        .then(data => {
+            alert('OTP sent successfully!');
+            closeModal('forgotPasswordModal');
+            document.getElementById('verifyOtpModal').style.display = 'block';
+            document.getElementById('modalOverlay').style.display = 'block';
+        })
+        .catch(err => {
+            alert(err.message);
+        });
+    }
+    function verifyOtp() {
+        const otp = document.getElementById('otpInput').value;
+        const username = document.getElementById('forgotUsername').value; // Get the username from the modal input field
+
+        if (!otp) {
+            alert('Please enter the OTP.');
+            return;
+        }
+
+        fetch('/verifyOtp?otp=' + encodeURIComponent(otp), {
+            method: 'POST'
+        })
+        .then(response => response.text())
+        .then(data => {
+            if (data.includes('Verified')) {
+                alert('OTP verified successfully!');
+                closeModal('verifyOtpModal');
+                window.location.href = '/resetpassword?username=' + encodeURIComponent(username);
+            } else {
+                alert('Invalid OTP.');
+            }
+        })
+        .catch(err => alert('Error verifying OTP.'));
+    }
+
+
+        function openForgotPasswordModal() {
+            document.getElementById('forgotPasswordModal').style.display = 'block';
+            document.getElementById('modalOverlay').style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            document.getElementById('modalOverlay').style.display = 'none';
+        }
+    </script>
+    
 <script>
 
 function loadcaptcha()
@@ -362,5 +591,6 @@ function callApi(method, url, data, responseHandler)
     .catch(error => alert(error));
 }
 </script>
+    
 </body>
 </html>

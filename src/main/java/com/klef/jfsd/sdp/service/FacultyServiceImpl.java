@@ -1,14 +1,17 @@
 package com.klef.jfsd.sdp.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.klef.jfsd.sdp.model.Attendance;
 import com.klef.jfsd.sdp.model.Faculty;
 import com.klef.jfsd.sdp.model.FacultyCourseMapping;
 import com.klef.jfsd.sdp.model.FacultyStudentCourseMaterials;
 import com.klef.jfsd.sdp.model.StudentCourseMapping;
+import com.klef.jfsd.sdp.repository.AttendanceRepository;
 import com.klef.jfsd.sdp.repository.FacultyCourseMappingRepository;
 import com.klef.jfsd.sdp.repository.FacultyRepository;
 import com.klef.jfsd.sdp.repository.FacultyStudentCourseMaterialsRepository;
@@ -30,6 +33,9 @@ public class FacultyServiceImpl implements FacultyService
 	@Autowired
 	FacultyStudentCourseMaterialsRepository materialsRepository;
 	
+	@Autowired
+	AttendanceRepository attendanceRepository;
+	
 	
 	
 	@Override
@@ -38,7 +44,11 @@ public class FacultyServiceImpl implements FacultyService
 		return facultyRepository.CheckFacultyLogin(username, pwd);
 	}
 
-
+	@Override
+	public Faculty viewFacultyByUsername(String username) {
+		 return facultyRepository.findByUsername(username)
+			        .orElse(null);
+	}
 
 
 	@Override
@@ -68,12 +78,43 @@ public class FacultyServiceImpl implements FacultyService
 	{
 		return studentCourseMappingRepository.findCourseAndSectionByFacultyId(fid, cid, section);
 	}
+
 	
 	@Override
 	public String AddMaterials(FacultyStudentCourseMaterials materials)
 	{
 		materialsRepository.save(materials);
 		return "Material Added Successfully";
+	}
+	
+	@Override
+	public StudentCourseMapping findSCMById(int id)
+	{
+		return studentCourseMappingRepository.findById(id).get();
+	}
+	
+	@Override
+	public String UpdateInternals(StudentCourseMapping scm) {
+	    	StudentCourseMapping mapping = studentCourseMappingRepository.findById(scm.getId()).get();
+	        mapping.setStudentInternals(scm.getStudentInternals());
+	        studentCourseMappingRepository.save(mapping);
+	        return "Added Successfully";
+	    
+	}
+
+	
+	@Override
+	public String PostAttendance(Map<Integer, Attendance> att)
+	{
+		try {
+			attendanceRepository.saveAll(att.values());
+			return "Attendance Posted Successfully";
+		}
+		catch (Exception e) {
+	        e.printStackTrace();
+	        return "Error while posting Attendance";
+	    }
+		
 	}
 
 

@@ -21,7 +21,6 @@
             color: #333;
         }
 
-        /* Circular Drop Zone Styles */
         .drop-zone {
             width: 150px;
             height: 150px;

@@ -1,12 +1,15 @@
 package com.klef.jfsd.sdp.service;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Map;
 
 import com.klef.jfsd.sdp.model.Admin;
 import com.klef.jfsd.sdp.model.Course;
 import com.klef.jfsd.sdp.model.Faculty;
 import com.klef.jfsd.sdp.model.FacultyCourseMapping;
 import com.klef.jfsd.sdp.model.Student;
+import com.klef.jfsd.sdp.model.StudentCourseMapping;
 
 public interface AdminService 
 {
@@ -40,6 +43,14 @@ public interface AdminService
 	  public List<FacultyCourseMapping> displayFacultyCourseMapping();
 	  
 	  public long checkFacultyCourseMapping(Faculty f,Course c,int section);
+	  
+	  public List<StudentCourseMapping> getStudentsByCourses(String academicYear, String offeredsem, int cid);
+	  public StudentCourseMapping findSCMById(int id);
+	  public String UpdateExternals(StudentCourseMapping scm);
+	public Map<String, Map<String, Integer>> getFeedbackSummary(int facultyId, int courseId) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, SecurityException;
+	public long CourseCount();
+	public long FacultyCount();
+	public long StudentCount();
 	
 	  
 	

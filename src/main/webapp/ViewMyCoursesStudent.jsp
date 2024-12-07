@@ -6,157 +6,232 @@
 <title>SHS University</title>
     <link rel="icon" href="/images/university-icon.png">
 <style>
- 
+:root {
+    --primary-color: #007bff;     /* Vibrant Blue */
+    --secondary-color: #6c757d;   /* Muted Gray */
+    --accent-color: #28a745;      /* Green Accent */
+    --background-light: #f8f9fa;  /* Light Background */
+    --text-dark: #2c3e50;         /* Dark Slate */
+    --transition-speed: 0.3s;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f4f4;
+    font-family: 'Inter', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, #f4f7fa 0%, #f1f3f5 100%);
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    padding-top: 60px; /* Adjust for navbar */
+    align-items: flex-start;
+    min-height: 100vh;
+    line-height: 1.6;
+    color: var(--text-dark);
+    padding: 40px 20px;
 }
 
 .form-container {
     background-color: white;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    width: 80%;
-    max-width: 1000px;
-    box-sizing: border-box;
-    overflow-x: auto;
+    padding: 50px;
+    border-radius: 20px;
+    box-shadow: 
+        0 20px 50px rgba(0, 0, 0, 0.1), 
+        0 10px 20px rgba(0, 0, 0, 0.05);
+    width: 90%;
+    max-width: 1200px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    margin-top: 100px;
+    margin-left: 215px;
+}
+
+.form-container::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at center, rgba(0, 123, 255, 0.03) 0%, transparent 70%);
+    transform: rotate(-45deg);
+    z-index: 1;
+    pointer-events: none;
 }
 
 h2 {
     text-align: center;
-    color: #333;
-    margin-bottom: 25px;
+    color: var(--text-dark);
+    margin-bottom: 40px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    position: relative;
+    font-size: 2rem;
 }
 
-.button, a.button {
-    background-color: #000;
-    border: none;
-    color: white;
-    padding: 12px 25px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
+h2::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    width: 80px;
+    height: 4px;
+    background-color: var(--primary-color);
+    transform: translateX(-50%);
+    border-radius: 2px;
 }
 
-.button:hover, a.button:hover {
-    background-color: #333;
-}
-
+/* Enhanced Table Styles */
 table {
     width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    overflow: hidden;
 }
 
-td, th {
-    padding: 15px;
+th, td {
+    padding: 18px 15px;
     text-align: center;
-    border: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e9ecef;
+    transition: all var(--transition-speed) ease;
 }
 
 th {
-    background-color: #f8f9fa;
-    color: #333;
+    background-color: var(--primary-color);
+    color: white;
     font-weight: 600;
     text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
 }
 
 tr:nth-child(even) {
-    background-color: #f2f2f2;
+    background-color: rgba(0, 123, 255, 0.02);
 }
 
 tr:hover {
-    background-color: #e8e8e8;
-    transition: background-color 0.3s ease;
+    background-color: rgba(0, 123, 255, 0.05);
 }
 
-label {
-    padding: 12px 12px 12px 0;
+/* Register and Course Materials Links */
+.register-link, .course-materials-link {
     display: inline-block;
+    padding: 12px 25px;
+    border-radius: 8px;
+    text-decoration: none;
     font-weight: 600;
-    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all var(--transition-speed) ease;
+    position: relative;
+    overflow: hidden;
 }
 
-/* Register Link Styling */
 .register-link {
-    text-decoration: none;
-    background-color: #000;
+    background-color: var(--text-dark);
     color: white;
-    font-weight: bold;
-    margin: 10px;
-    display: block;
-    text-align: center;
     position: absolute;
-    top:120px;
-    padding: 10px 20px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    top: 80px;
+    right: 5%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.register-link:hover {
-    background-color: #333;
-    color: white;
+.register-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: all var(--transition-speed) ease;
 }
 
-/* View Course Materials Link Styling */
+.register-link:hover::before {
+    left: 100%;
+}
+
 .course-materials-link {
-    display: inline-block;
-    background-color: #007bff;
+    background-color: var(--accent-color);
     color: white;
-    padding: 8px 15px;
-    border-radius: 4px;
-    text-decoration: none;
-    font-size: 14px;
-    transition: background-color 0.3s ease;
+    font-size: 0.8rem;
+    padding: 10px 20px;
 }
 
 .course-materials-link:hover {
-    background-color: #0056b3;
+    background-color: #218838;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(33, 136, 56, 0.3);
 }
 
 /* Responsive Design */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1024px) {
     .form-container {
         width: 95%;
-        padding: 15px;
+        padding: 30px 20px;
+        margin-left: 0;
+    }
+
+    .register-link {
+        position: static;
+        margin-bottom: 20px;
+        text-align: center;
+        width: 100%;
     }
 
     table {
-        font-size: 14px;
+        font-size: 0.9rem;
     }
 
-    td, th {
-        padding: 10px;
-    }
-
-    .course-materials-link {
-        padding: 6px 12px;
-        font-size: 12px;
+    th, td {
+        padding: 15px 10px;
     }
 }
 
-/* Ensure proper mobile responsiveness */
 @media screen and (max-width: 480px) {
     table {
-        font-size: 12px;
+        font-size: 0.8rem;
     }
 
-    td, th {
-        padding: 8px;
+    th, td {
+        padding: 12px 8px;
     }
+}
+
+/* Scrollbar Customization */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #0056b3;
+}
+
+/* Message Styling */
+h1[align="center"] {
+    text-align: center;
+    color: var(--secondary-color);
+    padding: 20px;
+    background-color: var(--background-light);
+    border-radius: 10px;
+    margin-top: 50px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 </style>
@@ -183,7 +258,8 @@ label {
             <th>COURSE TITLE</th>
             <th>SECTION</th>
             <th>FACULTY NAME</th>
-            <th>ACTIONS</th>
+            <th>View Materials</th>
+            <th>Give Course Feedback</th>
         </tr>
 
         <c:forEach items="${scm}" var="scm">
@@ -198,6 +274,13 @@ label {
                         View Course Materials
                     </a>
                 </td>
+                 <td>
+                    <a href="GiveCourseFeedBack?cid=${scm.course.courseid}&fid=${scm.faculty.id}" 
+                       class="course-materials-link">
+                        Give Course FeedBack
+                    </a>
+                </td>
+                
             </tr>
         </c:forEach>
     </table>

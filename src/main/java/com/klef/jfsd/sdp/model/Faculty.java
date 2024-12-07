@@ -19,7 +19,7 @@ public class Faculty
 	private int id;
 	@Column(name = "fname",length = 50,nullable = false)
 	private String name;
-	@Column(name = "fusername",length = 30,nullable = false)
+	@Column(name = "fusername",length = 30,nullable = false,unique = true)
 	private String username;
 	@Column(name = "fpassword",length = 30,nullable = false)
 	private String password;

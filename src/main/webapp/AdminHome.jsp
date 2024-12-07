@@ -1,3 +1,12 @@
+<%@page import="com.klef.jfsd.sdp.model.Admin"%>
+<%
+Admin a = (Admin)session.getAttribute("Admin");
+if(a==null)
+{
+	response.sendRedirect("/SessionExpiry");
+	return ;
+}
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +16,9 @@
     <link rel="icon" href="/images/university-icon.png">
     <link rel="stylesheet" href="style.css">
     <style>
-     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 * {
     margin: 0;
@@ -27,7 +38,7 @@ body {
     left: 0;
     height: 100vh;
     width: 260px;
-    background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%);
+    background-color: #1F2937;
     padding: 20px;
     transition: all 0.4s ease;
     box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
@@ -37,6 +48,7 @@ body {
     color: white;
     font-size: 24px;
     font-weight: 600;
+    letter-spacing: -0.4px;
     text-align: center;
     padding: 15px 0;
     margin-bottom: 30px;
@@ -51,38 +63,35 @@ body {
     transform: translateX(-50%);
     width: 60px;
     height: 3px;
-    background-color: #60a5fa;
+    background-color: black;
     border-radius: 10px;
 }
 
-/* Dropdown Container */
 .dropdown {
     position: relative;
     margin-bottom: 15px;
 }
 
-/* Main Menu Items */
 .dropdown > a {
     display: flex;
     align-items: center;
     padding: 12px 20px;
-    color: #e2e8f0;
+    color: #F9FAFB;
     text-decoration: none;
     font-size: 16px;
     font-weight: 500;
     border-radius: 8px;
     transition: all 0.3s ease;
     cursor: pointer;
-    background: rgba(255, 255, 255, 0.05);
+    background-color:#1F2937;
 }
 
 .dropdown > a:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
+    background-color:#374151 ;
+    color: #3B82F6;
     transform: translateX(5px);
 }
 
-/* Dropdown Menu */
 .dropdown-menu {
     max-height: 0;
     overflow: hidden;
@@ -95,11 +104,10 @@ body {
     max-height: 200px;
 }
 
-/* Dropdown Menu Items */
 .dropdown-menu a {
     display: block;
     padding: 10px 20px;
-    color: #cbd5e1;
+    color: #6B7280;
     text-decoration: none;
     font-size: 14px;
     font-weight: 400;
@@ -109,12 +117,11 @@ body {
 }
 
 .dropdown-menu a:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
+    background: rgba(59, 130, 246, 0.1); 
+    color: #3B82F6;
     transform: translateX(5px);
 }
 
-/* Add icons to main menu items */
 .dropdown > a::before {
     content: '';
     display: inline-block;
@@ -127,6 +134,21 @@ body {
     opacity: 0.8;
 }
 
+.profile-pic-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+}
+
+.profile-pic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #1e3a8a;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 /* Custom icons for each menu */
 .dropdown:nth-child(1) > a::before {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z' /%3E%3C/svg%3E");
@@ -137,46 +159,6 @@ body {
 }
 .dropdown:nth-child(3) > a::before {
 background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253' /%3E%3C/svg%3E");
-}
-
-
-/* Add subtle hover animation */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.dropdown:hover .dropdown-menu a {
-    animation: fadeIn 0.3s ease forwards;
-}
-
-/* Responsive Design */
-@media screen and (max-width: 768px) {
-    .sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
-        padding: 15px;
-    }
-
-    .sidebar h2 {
-        font-size: 20px;
-        margin-bottom: 20px;
-    }
-
-    .dropdown > a {
-        padding: 10px 15px;
-        font-size: 14px;
-    }
-
-    .dropdown-menu {
-        margin-left: 15px;
-    }
-
-    .dropdown-menu a {
-        padding: 8px 15px;
-        font-size: 13px;
-    }
 }	
         .toast {
             visibility: hidden;
@@ -210,6 +192,124 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
             from {top: 20px; opacity: 1;}
             to {top: 0; opacity: 0;}
         }
+        
+        :root {
+            --primary-color: #1F2937;
+            --secondary-color: #3B82F6;
+            --background-light: #f1f5f9;
+            --card-background: #ffffff;
+            --text-color: #2d3748;
+            --border-color: #e2e8f0;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--background-light);
+            display: flex;
+            min-height: 100vh;
+            color: var(--text-color);
+        }
+
+        .dashboard-container {
+            display: flex;
+            width: calc(100% - 260px);
+            margin-left: 260px;
+            padding: 2rem;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+
+        .dashboard-card {
+            background-color: var(--card-background);
+            border-radius: 16px;
+            padding: 1.5rem;
+            width: calc(33.333% - 1.5rem);
+            min-width: 250px;
+            box-shadow: 0 10px 25px var(--shadow-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg, 
+                transparent, 
+                var(--secondary-color), 
+                transparent
+            );
+            transform: rotate(-45deg);
+            opacity: 0.05;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .dashboard-card .icon {
+            margin-bottom: 1rem;
+            color: var(--secondary-color);
+            opacity: 0.8;
+            transition: transform 0.3s ease;
+        }
+
+        .dashboard-card .icon svg {
+            width: 4rem;
+            height: 4rem;
+        }
+
+        .dashboard-card:hover .icon {
+            transform: scale(1.1);
+            opacity: 1;
+        }
+
+        .dashboard-card h3 {
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .dashboard-card .count {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            font-weight: 700;
+        }
+
+        @media screen and (max-width: 1024px) {
+            .dashboard-container {
+                width: 100%;
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            .dashboard-card {
+                width: calc(50% - 1.5rem);
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -218,35 +318,73 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
         <h2>University</h2>
             <a>Student</a>
             <div class="dropdown-menu">
-                <a href="studentregistration">Add Student</a>
-                <a href="ViewAllStudent">View Student</a>
+                <a href="/Admin/studentregistration">Add Student</a>
+                <a href="/Admin/ViewAllStudent">View Student</a>
             </div>
         </div>
         <div class="dropdown">
             <a>Faculty</a>
             <div class="dropdown-menu">
-            	<a href="facultyregistration">Add Faculty</a>
-                <a href="ViewAllFaculty">View Faculty</a>
+            	<a href="/Admin/facultyregistration">Add Faculty</a>
+                <a href="/Admin/ViewAllFaculty">View Faculty</a>
             </div>
         </div>
         <div class="dropdown">
             <a>Course</a>
             <div class="dropdown-menu">
-            	<a href="addcourse">Add Course</a>
-                <a href="viewallcourses">View Courses</a>
+            	<a href="/Admin/addcourse">Add Course</a>
+                <a href="/Admin/viewallcourses">View Courses</a>
             </div>
             </div>
             <div class="dropdown">
             <a>Course Mapping</a>
             <div class="dropdown-menu">
-                <a href="facultyCourseMappingHome">Map Course to Faculty</a>
-                 <a href="viewfcoursemapping">View Faculty Course Mapping</a>
+                <a href="/Admin/facultyCourseMappingHome">Map Course to Faculty</a>
+                 <a href="/Admin/viewfcoursemapping">View Faculty Course Mapping</a>
             </div>
         </div>
         <div class="dropdown">
-        <a href="../Logout">Logout</a>
+        <a href="/Logout">Logout</a>
         </div>
     </div>
+    
+     
+    <div class="dashboard-container">
+        <!-- Student Count Card -->
+        <div class="dashboard-card">
+            <div class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.25M13.5 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+            </div>
+            <h3>Total Students</h3>
+            <div class="count">${studentCount}</div>
+        </div>
+
+        <!-- Faculty Count Card -->
+        <div class="dashboard-card">
+            <div class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+            </div>
+            <h3>Total Faculty</h3>
+            <div class="count">${facultyCount}</div>
+        </div>
+
+        <!-- Course Count Card -->
+        <div class="dashboard-card">
+            <div class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+            </div>
+            <h3>Total Courses</h3>
+            <div class="count">${courseCount}</div>
+        </div>
+    </div>
+    
+    
      <div id="toast" class="toast"></div>
     <script>
         document.addEventListener("DOMContentLoaded", function() {

@@ -1,6 +1,9 @@
 package com.klef.jfsd.sdp.service;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,11 +12,15 @@ import com.klef.jfsd.sdp.model.Admin;
 import com.klef.jfsd.sdp.model.Course;
 import com.klef.jfsd.sdp.model.Faculty;
 import com.klef.jfsd.sdp.model.FacultyCourseMapping;
+import com.klef.jfsd.sdp.model.Feedback;
 import com.klef.jfsd.sdp.model.Student;
+import com.klef.jfsd.sdp.model.StudentCourseMapping;
 import com.klef.jfsd.sdp.repository.AdminRepository;
 import com.klef.jfsd.sdp.repository.CourseRepository;
 import com.klef.jfsd.sdp.repository.FacultyCourseMappingRepository;
 import com.klef.jfsd.sdp.repository.FacultyRepository;
+import com.klef.jfsd.sdp.repository.FeedbackRepository;
+import com.klef.jfsd.sdp.repository.StudentCourseMappingRepository;
 import com.klef.jfsd.sdp.repository.StudentRepository;
 
 @Service
@@ -33,6 +40,12 @@ public class AdminServiceImpl implements AdminService
 	
 	@Autowired
 	FacultyCourseMappingRepository facultyCourseMappingRepository;
+	
+	@Autowired
+	StudentCourseMappingRepository studentCourseMappingRepository;
+	
+	@Autowired
+    private FeedbackRepository feedbackRepository;
 	
 	@Override
 	public Admin checkAdminLogin(String username, String password) 
@@ -172,10 +185,71 @@ public class AdminServiceImpl implements AdminService
 	public long checkFacultyCourseMapping(Faculty f, Course c, int section) {
 		return facultyCourseMappingRepository.checkfcoursemapping(f, c, section);
 	}
-
+	
+	@Override
+	public List<StudentCourseMapping> getStudentsByCourses(String academicYear, String offeredsem,int cid)
+	{
+		return studentCourseMappingRepository.findStudents(academicYear, offeredsem, cid);
+	}
 	
 	public String addcourse(Course c) {
 		courseRepository.save(c);
 		return "Course Added Successfully";
 	}
+	
+	@Override
+	public StudentCourseMapping findSCMById(int id)
+	{
+		return studentCourseMappingRepository.findById(id).get();
+	}
+	
+	@Override
+	public String UpdateExternals(StudentCourseMapping scm) {
+	    	StudentCourseMapping mapping = studentCourseMappingRepository.findById(scm.getId()).get();
+	        mapping.setStudentExternals(scm.getStudentExternals());
+	        studentCourseMappingRepository.save(mapping);
+	        return "Added Successfully";
+	    
+	}
+	
+	@Override
+	public Map<String, Map<String, Integer>> getFeedbackSummary(int facultyId, int courseId) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	    List<Feedback> feedbackList = feedbackRepository.findByFacultyIdAndCourseId(facultyId, courseId);
+	    
+	    Map<String, Map<String, Integer>> feedbackSummary = new HashMap<>();
+	    
+	    for (int i = 1; i <= 5; i++) {
+	        String question = "question" + i + "Feedback";
+	        feedbackSummary.put(question, new HashMap<>());
+	    }
+	    
+	    for (Feedback feedback : feedbackList) {
+	        for (int i = 1; i <= 5; i++) {
+	            String question = "question" + i + "Feedback";
+	            String response = feedback.getClass().getMethod("get" + capitalize(question)).invoke(feedback).toString();
+	            feedbackSummary.get(question).merge(response, 1, Integer::sum);
+	        }
+	    }
+	    return feedbackSummary;
+	}
+	
+	private String capitalize(String str) {
+	    return str.substring(0, 1).toUpperCase() + str.substring(1);
+	}
+	@Override
+	public long StudentCount()
+	{
+		return studentRepository.count();
+	}
+	@Override
+	public long FacultyCount()
+	{
+		return facultyRepository.count();
+	}
+	@Override
+	public long CourseCount()
+	{
+		return courseRepository.count();
+	}
+	
 }

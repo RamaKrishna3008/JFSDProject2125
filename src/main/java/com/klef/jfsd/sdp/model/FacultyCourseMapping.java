@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
 
 @Entity
 @Table(name="facultycoursemapping_table")
@@ -28,6 +29,12 @@ public class FacultyCourseMapping
 	  	
 	  @Column(nullable = false)
 	  private int section;
+	  
+	  @Column(nullable = false)
+	  @Min(value = 0)
+	  private int capacity;
+	  
+	  
 
 	public int getMappingid() {
 		return mappingid;
@@ -59,5 +66,13 @@ public class FacultyCourseMapping
 
 	public void setSection(int section) {
 		this.section = section;
+	}
+
+	public int getCapacity() {
+		return capacity;
+	}
+
+	public void setCapacity(int capacity) {
+		this.capacity = capacity;
 	}
 }

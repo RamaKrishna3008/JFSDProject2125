@@ -24,4 +24,7 @@ public interface FacultyCourseMappingRepository  extends JpaRepository<FacultyCo
 
 	@Query("select fcm FROM FacultyCourseMapping fcm WHERE fcm.course.courseid=?1")
 	  public List<FacultyCourseMapping> findSectionByCourseId(int courseid);
+	
+	@Query("select fcm FROM FacultyCourseMapping fcm WHERE fcm.course.courseid=?1 and fcm.faculty.id = ?2 AND fcm.section = ?3")
+	  public FacultyCourseMapping getListForCapacity(int courseid,int fid,int section);
 }

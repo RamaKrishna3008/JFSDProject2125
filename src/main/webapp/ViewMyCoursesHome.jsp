@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,106 +6,206 @@
     <link rel="icon" href="/images/university-icon.png">
 <link rel="stylesheet" type="text/css" href="/Styles/StudentNavBar.css">
 <style>
-  body {
-    background-color: #f0f4f8;
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --background-color: #f0f4f8;
+    --white: #ffffff;
+    --text-color: #333333;
+    --border-color: #ddd;
+    --gradient-light: rgba(0, 123, 255, 0.05);
+    --gradient-dark: rgba(0, 123, 255, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px; 
+}
+
+body {
+    font-family: 'Arial', 'Helvetica', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
-    font-family: Arial, sans-serif;
-  }
+    min-height: 100vh;
+    padding: 1rem;
+}
 
-  .form-container {
-    background-color: #ffffff;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-    width: 90%;
-    max-width: 600px;
-    box-sizing: border-box;
-  }
+.form-container {
+    background-color: var(--white);
+    width: 100%;
+    max-width: 500px; /* Adjusted from fixed width to responsive max-width */
+    padding: 2rem;
+    border-radius: 1.25rem;
+    box-shadow: 
+        0 1.25rem 3.125rem rgba(0, 0, 0, 0.1), 
+        0 0.625rem 1.25rem rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    margin: 0 auto; /* Center the container */
+}
 
-  h2 {
+.form-container::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+        circle at center, 
+        var(--gradient-light) 0%, 
+        transparent 70%
+    );
+    transform: rotate(-45deg);
+    z-index: 1;
+    pointer-events: none;
+}
+
+h2 {
     text-align: center;
-    color: #333333;
+    margin-bottom: 1.875rem;
     font-size: 1.5rem;
-    margin-bottom: 20px;
-  }
+    position: relative;
+    padding-bottom: 0.625rem;
+}
 
-  .button {
-    background-color: #007bff;
+h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 3.75rem;
+    height: 3px;
+    background-color: var(--primary-color);
+    transform: translateX(-50%);
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--secondary-color);
+}
+
+select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.375rem;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M1 4l5 5 5-5z' fill='%23999999'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    transition: all 0.3s ease;
+}
+
+select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--gradient-dark);
+}
+
+.button {
+    display: block;
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--primary-color);
+    color: var(--white);
     border: none;
-    color: white;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 4px;
+    border-radius: 0.375rem;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-
-  .button:hover {
-    background-color: #0056b3;
-  }
-
-  input[type=text], input[type=password], input[type=number], input[type=email],
-  select, input[type=date], input[type=datetime-local] {
-    width: 100%;
-    padding: 12px;
-    margin: 8px 0;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    box-sizing: border-box;
-    font-size: 14px;
-  }
-
-  label {
-    font-weight: bold;
-    color: #555;
-  }
-
-  table {
-    width: 100%;
-    border-spacing: 0 10px;
-  }
-
-  td {
-    padding: 8px;
-    vertical-align: top;
-  }
-
-  .center {
-    text-align: center;
-  }
-
-  h3 {
-    color: red;
-    text-align: center;
     font-size: 1rem;
-    margin-bottom: 10px;
-  }
+    font-weight: 600;
+    transition: all 0.3s ease;
+    margin-top: 1.25rem;
+}
 
-  @media (max-width: 600px) {
+.button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.button:active {
+    transform: translateY(1px);
+}
+
+.toast {
+    position: fixed;
+    top: 1.25rem;
+    right: 1.25rem;
+    min-width: 18.75rem;
+    padding: 1rem 1.25rem;
+    border-radius: 0.625rem;
+    box-shadow: 0 0.375rem 1.25rem rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1200;
+}
+
+.toast.show {
+    opacity: 1;
+}
+
+.toast.success {
+    background: linear-gradient(145deg, #4CAF50, #43A047);
+    color: white;
+}
+
+.toast.failure {
+    background: linear-gradient(145deg, #f44336, #e53935);
+    color: white;
+}
+
+@media screen and (max-width: 480px) {
+    html {
+        font-size: 14px; /* Slightly smaller base font for very small screens */
+    }
+
     .form-container {
-      width: 100%;
-      padding: 15px;
+        padding: 1.5rem;
+        margin: 0;
+        border-radius: 0.75rem;
     }
 
     h2 {
-      font-size: 1.2rem;
+        font-size: 1.25rem;
+        margin-bottom: 1.25rem;
     }
 
-    input[type=text], input[type=password], input[type=number], input[type=email],
-    select, input[type=date], input[type=datetime-local] {
-      font-size: 13px;
-      padding: 10px;
+    select, .button {
+        font-size: 0.9rem;
+        padding: 0.625rem;
     }
 
-    .button {
-      font-size: 14px;
-      padding: 8px 16px;
+    .toast {
+        width: calc(100% - 2.5rem);
+        left: 1.25rem;
+        right: auto;
+        transform: translateX(0);
     }
-  }
+}
+
+@media screen and (min-width: 481px) and (max-width: 768px) {
+    .form-container {
+        width: 90%;
+        max-width: 450px;
+    }
+}
 </style>
 </head>
 <body>
@@ -116,32 +215,48 @@
 
   
   <form action="ViewMyCourses">
-    <table>
-      <tr>
-        <td><label for="academicyear">Academic Year</label>
-			<select id="academicyear" name="academicyear" required>
-			<option value="">--Select--</option>
-   			 <option value="2025-2024">2025-2024</option>
-    		<option value="2024-2023">2024-2023</option>
-			</select></td></tr>
-			
-			<tr><td><label for="sem">Semester</label>
-			<select id="sem" name="sem" required>
-			<option value="">--Select--</option>
-   			 <option value="ODD">ODD Semester</option>
-    		<option value="EVEN">EVEN Semester</option>
-    		<option value="SUMMER">SUMMER Semester</option>
-			</select>
-        </td>
-      </tr>
-      <tr>
-        <td class="center">
-          <input type="submit" value="Submit" class="button">
-        </td>
-      </tr>
-    </table>
-  </form>
+            <div class="form-group">
+                <label for="academicyear">Academic Year</label>
+                <select id="academicyear" name="academicyear" required>
+                    <option value="">--Select--</option>
+                    <option value="2025-2024">2025-2024</option>
+                    <option value="2024-2023">2024-2023</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="sem">Semester</label>
+                <select id="sem" name="sem" required>
+                    <option value="">--Select--</option>
+                    <option value="ODD">ODD Semester</option>
+                    <option value="EVEN">EVEN Semester</option>
+                    <option value="SUMMER">SUMMER Semester</option>
+                </select>
+            </div>
+
+            <button type="submit" class="button">Submit</button>
+        </form>
 </div>
+
+<div id="toast" class="toast"></div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const message = urlParams.get('message');
+            if (message) {
+                const toast = document.getElementById("toast");
+                toast.textContent = message;
+                
+                    toast.classList.add("show", "success");
+                
+                
+                setTimeout(() => {
+                    toast.classList.remove("show", "success");
+                }, 3000);
+            }
+        });
+    </script>
+    
 
 
 </body>

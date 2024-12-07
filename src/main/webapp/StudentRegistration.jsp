@@ -7,7 +7,6 @@
     <title>SHS University</title>
     <link rel="icon" href="/images/university-icon.png">
     <style>
-    /* Base styles */
 * {
     margin: 0;
     padding: 0;
@@ -163,19 +162,75 @@ input[type="reset"]:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Toast Notification Styling */
+
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.7);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #2d3748;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px 15px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #1a237e;
+    box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.1);
+}
+
+.form-control.is-invalid {
+    border-color: #f44336;
+    box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.1);
+}
+
+.invalid-feedback {
+    color: #f44336;
+    font-size: 0.85rem;
+    margin-top: 5px;
+}
+
 .toast {
     position: fixed;
-    bottom: 30px;
-    right: 30px;
-    padding: 16px 24px;
+    bottom: 20px;
+    right: 20px;
+    max-width: 300px; 
+    padding: 8px 12px;
     border-radius: 10px;
     color: white;
-    font-weight: 500;
+    font-weight: 400;
     font-size: 0.95rem;
     opacity: 0;
     transform: translateY(100%);
     transition: all 0.3s ease;
+    z-index: 1000; 
+    text-align: center; 
+    box-sizing: border-box;
+    word-wrap: break-word;
+    overflow: hidden; 
 }
 
 .toast.show {
@@ -193,7 +248,7 @@ input[type="reset"]:hover {
     box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
 }
 
-/* Responsive Design */
+
 @media screen and (max-width: 768px) {
     .container {
         padding: 20px;
@@ -233,47 +288,77 @@ input[type="reset"]:hover {
 </head>
 <body>
     <div class="container">
-        <h2>Student Registration</h2>
-        <form action="RegisterStudent" method="post" enctype="multipart/form-data">
+    <h2>Student Registration</h2>
+    <form id="studentForm" action="RegisterStudent" method="post" enctype="multipart/form-data" onsubmit="return checkEmailVerification()">
         
         <label for="idno">Id No</label>
-            <input type="number" id="idno" name="idno" required>
-            <label for="ay">Acedmic Year</label>
-            <input type="text" id="ay" name="ay" required>
-            
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" required>
+        <input type="number" id="idno" name="idno" required>
 
-            <label for="fathername">Father Name</label>
-            <input type="text" id="fathername" name="fathername" required>
+        <label for="ay">Academic Year</label>
+        <input type="text" id="ay" name="ay" required>
+        
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" required>
 
-            <label for="mothername">Mother Name</label>
-            <input type="text" id="mothername" name="mothername" required>
+        <label for="fathername">Father Name</label>
+        <input type="text" id="fathername" name="fathername" required>
+
+        <label for="mothername">Mother Name</label>
+        <input type="text" id="mothername" name="mothername" required>
+
+        <label for="contactno">Contact No</label>
+		<input type="text" id="contactno" name="contactno" required pattern="[6-9]{1}[0-9]{9}">
+		<small id="contactnoError" style="color: red; display: none;">Invalid contact number. It should start with 6, 7, 8, or 9 and be 10 digits long.</small>
+
+<script>
+    document.getElementById("contactno").addEventListener("input", function() {
+        const contactField = document.getElementById("contactno");
+        const errorField = document.getElementById("contactnoError");
+
+        const phoneNumberPattern = /^[6-9]\d{9}$/; 
+        if (phoneNumberPattern.test(contactField.value)) {
+            errorField.style.display = "none";
+            contactField.setCustomValidity(""); 
+        } else {
+            errorField.style.display = "block";
+            contactField.setCustomValidity("Invalid contact number.");
+        }
+    });
+
+    function checkEmailVerification() {
+        const contactField = document.getElementById("contactno");
+        const phoneNumberPattern = /^[6-9]\d{9}$/;
+
+        if (!phoneNumberPattern.test(contactField.value)) {
+            contactField.focus();
+            return false; 
+        }
+        return true; 
+    }
+</script>
+
+        
+        <label for="address">Address</label>
+        <textarea rows="3" cols="30" name="address"></textarea>
+        
+        <label for="password">Password</label>
+        <input type="text" id="password" name="password" value="erp123" readonly="readonly">
+        
+        <label for="profileImage">Profile Image (JPG only)</label>
+        <input type="file" id="profileImage" name="profileImage" accept=".jpg">
+        
+        
+
+        <div class="button-group">
+            <input type="submit" value="Register">
+            <input type="reset" value="Clear">
+        </div>
+    </form>
+</div>
 
 
-            <label for="contactno">Contact No</label>
-            <input type="number" id="contactno" name="contactno" pattern="[6-9]{1}[0-9]{9}"  required>
- 			<small>Format: 10 digits starting with 6, 7, 8, or 9</small><br>
-    
-            
-            
-            
-            <label for="address">Address</label>
-			<textarea rows="3" cols="30" name="address"></textarea>
-			
-			 <label for="password">Password</label>
-            <input type="text" id="password" name="password" value="erp123" readonly="readonly" >
-			
-			<label for="profileImage">Profile Image (JPG only)</label>
-            <input type="file" id="profileImage" name="profileImage" accept=".jpg">
-            
-            
-            <div class="button-group">
-                <input type="submit" value="Register">
-                <input type="reset" value="Clear">
-            </div>
-        </form>
-    </div>
+
+
     <div id="toast" class="toast"></div>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -295,5 +380,7 @@ input[type="reset"]:hover {
             }
         });
     </script>
+    
+
 </body>
 </html>

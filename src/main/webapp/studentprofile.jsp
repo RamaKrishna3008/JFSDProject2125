@@ -57,7 +57,7 @@
     color: #333;
 }
 
-.info input[type="text"],
+.info input[type="text"],.info input[type="email"],
 .info input[type="password"] {
     width: 100%;
     padding: 0.75rem;
@@ -68,7 +68,7 @@
     transition: border-color 0.3s ease;
 }
 
-.info input[type="text"]:focus,
+.info input[type="text"]:focus,.info input[type="email"]:focus,
 .info input[type="password"]:focus {
     outline: none;
     border-color: #1e40af;
@@ -196,6 +196,8 @@ input[type="file"]::-webkit-file-upload-button:hover {
                 <!-- Additional Information Section -->
                 <div class="info">
                     <h3>Additional Information</h3>
+                    <label for="parentEmail">Parent Email</label>
+        			<input type="email" id="parentEmail" name="parentEmail" value="<%=st.getParentEmail() %>" readonly>
                     <label for="fatherName">Father's Name:</label>
                     <input type="text" id="fatherName" name="fatherName"
                         value="<%= st.getFatherName() %>"

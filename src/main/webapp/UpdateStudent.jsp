@@ -185,7 +185,9 @@ input:invalid {
             <label for="contactno">Contact No</label>
             <input type="number" id="contactno" name="contactno" pattern="[6-9]{1}[0-9]{9}" value="${student.getContact()}"  required>
  			<small>Format: 10 digits starting with 6, 7, 8, or 9</small><br><br><br>
-    
+    			
+    		<label for="parentEmail">Parent Email</label>
+       		<input type="email" id="parentEmail" name="parentEmail" value="${student.getParentEmail()}" required>
             
             
             

@@ -1,5 +1,15 @@
+<%@page import="com.klef.jfsd.sdp.model.Admin"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" isELIgnored="false"%>
+    
+    <%
+Admin a = (Admin)session.getAttribute("Admin");
+if(a==null)
+{
+	response.sendRedirect("/SessionExpiry");
+	return ;
+}
+%>
     
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
 

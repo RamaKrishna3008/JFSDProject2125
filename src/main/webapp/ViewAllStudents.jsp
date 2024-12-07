@@ -1,5 +1,15 @@
+<%@page import="com.klef.jfsd.sdp.model.Admin"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" isELIgnored="false"%>
+    
+    <%
+Admin a = (Admin)session.getAttribute("Admin");
+if(a==null)
+{
+	response.sendRedirect("/SessionExpiry");
+	return ;
+}
+%>
     
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
 
@@ -185,12 +195,12 @@ h3 u {
     font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 1px;
-    padding: 18px;
+    padding: 14px;
     text-align: left;
 }
 
 #myTable td {
-    padding: 16px;
+    padding: 10px;
     border-bottom: 1px solid #edf2f7;
     vertical-align: middle;
     font-size: 0.95rem;
@@ -212,7 +222,7 @@ h3 u {
 /* Action Buttons */
 #myTable td .action-cell {
     display: flex;
-    gap: 10px;
+    gap: px;
 }
 
 #myTable td a {
@@ -220,12 +230,12 @@ h3 u {
     align-items: center;
     justify-content: center;
     padding: 8px 16px;
-    border-radius: 6px;
+    border-radius: 8px;
     text-decoration: none;
     font-weight: 500;
-    font-size: 0.875rem;
+    font-size: 0.8rem;
     transition: all 0.3s ease;
-    min-width: 80px;
+    min-width: 100px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 

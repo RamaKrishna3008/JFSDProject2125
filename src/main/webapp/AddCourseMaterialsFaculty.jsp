@@ -218,6 +218,36 @@ input[type="submit"]:hover {
         border: 1px solid #ccc;
     }
 }
+.toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1;
+            top: 20px;
+            right: 20px;
+            font-size: 17px;
+        }
+        .toast.show {
+            visibility: visible;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+        .toast.success {
+            background-color: green;
+        }
+        @keyframes fadein {
+            from {top: 0; opacity: 0;}
+            to {top: 20px; opacity: 1;}
+        }
+        @keyframes fadeout {
+            from {top: 20px; opacity: 1;}
+            to {top: 0; opacity: 0;}
+        }
+
     </style>
 </head>
 <body>
@@ -227,7 +257,7 @@ input[type="submit"]:hover {
     
         <div class="drop-zone" id="dropZone" onclick="document.getElementById('file').click()">
             <div class="drop-zone-text" id="fileNameDisplay">
-                Drop files here or click to upload (PDF, PPTX, Word)
+                Drop files here or click to upload (PDF, PPTX, Word) Less Than 1MB Only 
             </div>
             <input type="file" id="file" name="file" accept=".pdf,.pptx,.doc,.docx" required>
         </div>
@@ -251,65 +281,93 @@ input[type="submit"]:hover {
         </div>
     </form>
 </div>
-<script>
-    const dropZone = document.getElementById('dropZone');
-    const fileInput = document.getElementById('file');
-    const fileNameDisplay = document.getElementById('fileNameDisplay');
-
-    // Handle drag and drop events
-    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-        dropZone.addEventListener(eventName, preventDefaults, false);
-    });
-
-    function preventDefaults(e) {
-        e.preventDefault();
-        e.stopPropagation();
-    }
-
-    ['dragenter', 'dragover'].forEach(eventName => {
-        dropZone.addEventListener(eventName, highlight, false);
-    });
-
-    ['dragleave', 'drop'].forEach(eventName => {
-        dropZone.addEventListener(eventName, unhighlight, false);
-    });
-
-    function highlight(e) {
-        dropZone.classList.add('dragover');
-    }
-
-    function unhighlight(e) {
-        dropZone.classList.remove('dragover');
-    }
-
-    dropZone.addEventListener('drop', function (e) {
-        const dt = e.dataTransfer;
-        const files = dt.files;
-        handleFiles(files);
-    });
-
-    fileInput.addEventListener('change', function () {
-        handleFiles(this.files);
-    });
-
-    function handleFiles(files) {
-        if (files.length > 0) {
-            const file = files[0];
-            const allowedTypes = [
-                'application/pdf',
-                'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-                'application/msword',
-                'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-            ];
-            if (allowedTypes.includes(file.type)) {
-                fileNameDisplay.textContent = `Selected file: ${file.name}`;
-            } else {
-                alert('Invalid file type. Please upload a PDF, PPTX, or Word document.');
-                fileInput.value = '';
-                fileNameDisplay.textContent = 'Drop files here or click to upload (PDF, PPTX, Word)';
+<div id="toast" class="toast"></div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const message = urlParams.get('message');
+            if (message) {
+                const toast = document.getElementById("toast");
+                toast.textContent = message;
+                
+               
+                    toast.classList.add("show", "success");
+                
+                setTimeout(() => {
+                    toast.classList.remove("show", "success");
+                }, 3000);
             }
+        });
+    </script>
+<script>
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('file');
+const fileNameDisplay = document.getElementById('fileNameDisplay');
+
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    dropZone.addEventListener(eventName, preventDefaults, false);
+});
+
+function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+}
+
+['dragenter', 'dragover'].forEach(eventName => {
+    dropZone.addEventListener(eventName, highlight, false);
+});
+
+['dragleave', 'drop'].forEach(eventName => {
+    dropZone.addEventListener(eventName, unhighlight, false);
+});
+
+function highlight(e) {
+    dropZone.classList.add('dragover');
+}
+
+function unhighlight(e) {
+    dropZone.classList.remove('dragover');
+}
+
+dropZone.addEventListener('drop', function (e) {
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    handleFiles(files);
+});
+
+fileInput.addEventListener('change', function () {
+    handleFiles(this.files);
+});
+
+function handleFiles(files) {
+    if (files.length > 0) {
+        const file = files[0];
+        const allowedTypes = [
+            'application/pdf',
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+            'application/msword',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        ];
+        
+        if (!allowedTypes.includes(file.type)) {
+            alert('Invalid file type. Please upload a PDF, PPTX, or Word document.');
+            fileInput.value = '';
+            fileNameDisplay.textContent = 'Drop files here or click to upload (PDF, PPTX, Word)';
+            return;
         }
+        
+        const maxSizeBytes = 1 * 1024 * 1024; 
+        if (file.size > maxSizeBytes) {
+            alert('File is too large. Please upload a file under 1 MB.');
+            fileInput.value = '';
+            fileNameDisplay.textContent = 'Drop files here or click to upload (PDF, PPTX, Word)';
+            return;
+        }
+        
+        fileNameDisplay.textContent = `Selected file: ${file.name}`;
     }
+}
 </script>
+
 </body>
 </html>

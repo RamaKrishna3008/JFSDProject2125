@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import com.klef.jfsd.sdp.model.Faculty;
 
 import jakarta.transaction.Transactional;
+import java.util.Optional;
+
 
 @Repository
 public interface FacultyRepository extends JpaRepository<Faculty, Integer>
@@ -19,5 +21,6 @@ public interface FacultyRepository extends JpaRepository<Faculty, Integer>
 	@Transactional
 	@Modifying 
 	public int updatefacultystatus(String status,int fid);
-
+	
+	public Optional<Faculty> findByUsername(String username);
 }

@@ -2,7 +2,7 @@
 <%
 Student st = (Student) session.getAttribute("student");
 if (st == null) {
-    response.sendRedirect("stsessionexpiry");
+    response.sendRedirect("/SessionExpiry");
     return;
 }
 %>
@@ -28,8 +28,9 @@ if (st == null) {
 	<button class="nav-button" onclick="window.location.href='/Student/home'">Dashboard</button>
 	<button class="nav-button" onclick="window.location.href='/Student/profile'">Profile</button>
 	<button class="nav-button" onclick="window.location.href='/Student/ViewMyCoursesHome'">Courses</button>
-	<button class="nav-button">My CGPA</button>
-	<button class="nav-button">Attendance</button>
+	<button class="nav-button" onclick="window.location.href='/Student/MyCGPA'">My CGPA</button>
+	<button class="nav-button" onclick="window.location.href='/Student/EndSemResultHome'">End Sem Result</button>
+	<button class="nav-button" onclick="window.location.href='/Student/AttendanceRegisterHome'">Attendance</button>
 	<button class="nav-button" onclick="window.location.href='/Logout'">Logout</button>
 </div>
 <div class="profile-pic-container">

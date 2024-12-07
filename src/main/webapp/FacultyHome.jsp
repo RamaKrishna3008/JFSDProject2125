@@ -2,11 +2,11 @@
 <%@page import="com.klef.jfsd.sdp.model.Faculty"%>
 <%
 Faculty f = (Faculty)session.getAttribute("faculty");
-	if(f==null)
-	{
-		response.sendRedirect("SessionExpiry");
-		return ;
-	}
+if(f==null)
+{
+	response.sendRedirect("/SessionExpiry");
+	return ;
+}
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,7 +36,7 @@ body {
     left: 0;
     height: 100vh;
     width: 260px;
-    background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%);
+    background-color: #1F2937;
     padding: 20px;
     transition: all 0.4s ease;
     box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
@@ -46,6 +46,7 @@ body {
     color: white;
     font-size: 24px;
     font-weight: 600;
+    letter-spacing: -0.4px;
     text-align: center;
     padding: 15px 0;
     margin-bottom: 30px;
@@ -60,38 +61,35 @@ body {
     transform: translateX(-50%);
     width: 60px;
     height: 3px;
-    background-color: #60a5fa;
+    background-color: black;
     border-radius: 10px;
 }
 
-/* Dropdown Container */
 .dropdown {
     position: relative;
     margin-bottom: 15px;
 }
 
-/* Main Menu Items */
 .dropdown > a {
     display: flex;
     align-items: center;
     padding: 12px 20px;
-    color: #e2e8f0;
+    color: #F9FAFB;
     text-decoration: none;
     font-size: 16px;
     font-weight: 500;
     border-radius: 8px;
     transition: all 0.3s ease;
     cursor: pointer;
-    background: rgba(255, 255, 255, 0.05);
+    background-color:#1F2937;
 }
 
 .dropdown > a:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
+    background-color:#374151 ;
+    color: #3B82F6;
     transform: translateX(5px);
 }
 
-/* Dropdown Menu */
 .dropdown-menu {
     max-height: 0;
     overflow: hidden;
@@ -104,11 +102,10 @@ body {
     max-height: 200px;
 }
 
-/* Dropdown Menu Items */
 .dropdown-menu a {
     display: block;
     padding: 10px 20px;
-    color: #cbd5e1;
+    color: #6B7280;
     text-decoration: none;
     font-size: 14px;
     font-weight: 400;
@@ -118,12 +115,11 @@ body {
 }
 
 .dropdown-menu a:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
+    background: rgba(59, 130, 246, 0.1); 
+    color: #3B82F6;
     transform: translateX(5px);
 }
 
-/* Add icons to main menu items */
 .dropdown > a::before {
     content: '';
     display: inline-block;
@@ -151,7 +147,6 @@ body {
     border: 2px solid #1e3a8a;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-/* Custom icons for each menu */
 .dropdown:nth-child(3) > a::before {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z' /%3E%3C/svg%3E");
 }
@@ -215,11 +210,11 @@ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
             </div>
             </div>
         <div class="dropdown">
-            <a href="../Logout">Logout</a>
+            <a href="/Logout">Logout</a>
         </div>
     </div>
    <div class="profile-pic-container">
-    <img src="../Admin/displayfacultyimage?id=<%=f.getId()%>" class="profile-pic" >
+    <img src="/Admin/displayfacultyimage?id=<%=f.getId()%>" class="profile-pic" >
 	</div>
     <div id="toast" class="toast"></div>
     <script>

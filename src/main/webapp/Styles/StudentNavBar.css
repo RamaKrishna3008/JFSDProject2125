@@ -1,15 +1,16 @@
-@charset "UTF-8";
-/* styles.css */
+@charset "UTF-8"; /* styles.css */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
 }
+
 body {
-    background-color: #f5f7fa;
-    color: #333;
+    background-color: #f4f4f4; /* Lighter gray background */
+    color: #333; /* Dark gray text color */
     line-height: 1.6;
     min-height: 100vh;
 }
@@ -22,7 +23,7 @@ body {
 /* Left Navigation Bar Styles */
 .bg-left {
     width: 250px;
-    background: linear-gradient(180deg, #1a237e 0%, #1e40af 100%);
+    background: linear-gradient(180deg, #444 0%, #333 100%); /* Dark gray gradient */
     padding: 2rem 1rem;
     display: flex;
     flex-direction: column;
@@ -36,7 +37,7 @@ body {
 .nav-button {
     background: transparent;
     border: none;
-    color: white;
+    color: #f4f4f4; /* Light gray text */
     padding: 1rem;
     text-align: left;
     font-size: 1rem;
@@ -55,14 +56,14 @@ body {
     flex: 1;
     padding: 2rem;
     margin-left: 250px;
-    background-color: #f5f7fa;
+    background-color: #f4f4f4;
 }
 
 .bg-right h2 {
-    color: #1a237e;
+    color: #444; /* Dark gray heading */
     margin-bottom: 2rem;
     font-size: 1.8rem;
-    border-bottom: 2px solid #e0e0e0;
+    border-bottom: 2px solid #555;
     padding-bottom: 0.5rem;
 }
 
@@ -87,19 +88,19 @@ h2, h3 {
 .info p {
     margin: 0;
     padding: 8px 0;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #555;
 }
 
-input[type="text"], [type="password"] {
+input[type="text"], input[type="password"] {
     width: calc(100% - 20px);
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #666;
     border-radius: 5px;
     margin-bottom: 10px;
 }
 
 input[type="submit"] {
-    background-color: #555;
+    background-color: #444;
     color: white;
     padding: 10px;
     border: none;
@@ -109,7 +110,7 @@ input[type="submit"] {
 }
 
 input[type="submit"]:hover {
-    background-color: #000;
+    background-color: #222;
 }
 
 /* Responsive Design */

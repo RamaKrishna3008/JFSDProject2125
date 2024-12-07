@@ -16,7 +16,6 @@ Faculty fac = (Faculty)session.getAttribute("faculty");
 <title>SHS University</title>
     <link rel="icon" href="/images/university-icon.png">
 <style>
-  /* Global Reset and Base Styles */
 * {
     margin: 0;
     padding: 0;
@@ -43,9 +42,10 @@ body {
     padding: 30px;
     margin: 20px;
     overflow-x: auto;
+    margin-left: 250px;
 }
 
-h2 {
+h1 {
     text-align: center;
     color: #2c3e50;
     margin-bottom: 25px;
@@ -176,7 +176,7 @@ td a:nth-child(5) {
 <body>
 
 <div class="form-container">
-  <h2>My Courses</h2>
+  <h1>My Courses</h1>
 
   <table>
     <tr> 
@@ -191,7 +191,7 @@ td a:nth-child(5) {
           <td><c:out value="${fcm.course.coursecode}" /></td> 
           <td><c:out value="${fcm.course.coursetitle}" /></td> 
           <td><c:out value="${fcm.section}" /></td> 
-          <td><a href="GetStudentsByCourses?fid=${fcm.faculty.id }&cid=${fcm.course.courseid}&section=${fcm.section}">Register</a><br><a href="AddStudentInternals?fid=${fcm.faculty.id }&cid=${fcm.course.courseid}&section=${fcm.section}">Add Internals</a><br><a href="AddCourseMaterials?cid=${fcm.course.courseid}&section=${fcm.section}">Add Materials</a></td>
+          <td><a href="Attendance/View?fid=${fcm.faculty.id }&cid=${fcm.course.courseid}&section=${fcm.section}">Register</a><br><a href="AddStudentInternals?fid=${fcm.faculty.id }&cid=${fcm.course.courseid}&section=${fcm.section}">Add Internals</a><br><a href="AddCourseMaterials?cid=${fcm.course.courseid}&section=${fcm.section}">Add Materials</a></td>
         </tr> 
     </c:forEach> 
   </table>

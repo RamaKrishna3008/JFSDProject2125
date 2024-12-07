@@ -1,5 +1,15 @@
+<%@page import="com.klef.jfsd.sdp.model.Admin"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" isELIgnored="false"%>
+    
+    <%
+Admin a = (Admin)session.getAttribute("Admin");
+if(a==null)
+{
+	response.sendRedirect("/SessionExpiry");
+	return ;
+}
+%>
     
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
 
@@ -342,6 +352,7 @@ h3 u {
         <p><span class="label">Mother's Name:</span> <span class="value"><c:out value="${student.motherName}" /></span></p>
         <p><span class="label">Address:</span> <span class="value"><c:out value="${student.address}" /></span></p>
         <p><span class="label">Contact No:</span> <span class="value"><c:out value="${student.contact}" /></span></p>
+        <p><span class="label">Parent Email:</span> <span class="value"><c:out value="${student.parentEmail}" /></span></p>
         <p><span class="label">Status:</span> <span class="value"><c:out value="${student.status}" /></span></p>
         <p><span class="label">Registartion Status:</span> <span class="value"><c:out value="${student.registarationStatus}" /></span></p>
         <p><span class="label">Creation Time:</span> <br><span class="value"><c:out value="${student.createdAt}" /></span></p>

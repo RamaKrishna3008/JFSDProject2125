@@ -1,10 +1,13 @@
 package com.klef.jfsd.sdp.controller;
 
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Blob;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.rowset.serial.SerialBlob;
 
@@ -14,17 +17,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.klef.jfsd.sdp.model.Admin;
 import com.klef.jfsd.sdp.model.Course;
 import com.klef.jfsd.sdp.model.Faculty;
 import com.klef.jfsd.sdp.model.FacultyCourseMapping;
 import com.klef.jfsd.sdp.model.Student;
+import com.klef.jfsd.sdp.model.StudentCourseMapping;
 import com.klef.jfsd.sdp.service.AdminService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,6 +46,9 @@ public class AdminController
 	public ModelAndView AdminHome()
 	{
 		ModelAndView mv= new ModelAndView("AdminHome");
+		mv.addObject("studentCount", service.StudentCount());
+		mv.addObject("facultyCount", service.FacultyCount());
+		mv.addObject("courseCount", service.CourseCount());
 		return mv;
 	}
 	
@@ -61,8 +68,8 @@ public class AdminController
 		try {
 		String name = request.getParameter("name");
 		String username = request.getParameter("username");
-		String pwd = request.getParameter("password");
 		String email = request.getParameter("email");
+		String pwd = request.getParameter("password");
 		String contact = request.getParameter("contactno");
 		
 		 Blob blob;
@@ -71,7 +78,6 @@ public class AdminController
 	            byte[] bytes = file.getBytes();
 	            blob = new SerialBlob(bytes);
 	        } else {
-	            // Load the default image file from server
 	            Path defaultImagePath = Paths.get("src/main/webapp/images/default-profile-picture.jpg");
 	            byte[] defaultImageBytes = Files.readAllBytes(defaultImagePath);
 	            blob = new SerialBlob(defaultImageBytes);
@@ -143,6 +149,7 @@ public class AdminController
 	        s.setPassword(pwd);
 	        s.setAddress(address);
 	        s.setContact(contact);
+	        s.setParentEmail("");
 	        s.setImage(blob);
 	        s.setStatus("NC");
 	        s.setBatchname(acemdemicyear);
@@ -157,6 +164,9 @@ public class AdminController
 	    }
 	    return mv;
 	}
+	    
+	   
+
 
 
 	
@@ -208,7 +218,6 @@ public class AdminController
 	            byte[] bytes = file.getBytes();
 	            blob = new SerialBlob(bytes);
 	        } else {
-	            // Load the default image file from server
 	            Path defaultImagePath = Paths.get("src/main/webapp/images/default-profile-picture.jpg");
 	            byte[] defaultImageBytes = Files.readAllBytes(defaultImagePath);
 	            blob = new SerialBlob(defaultImageBytes);
@@ -304,7 +313,6 @@ public class AdminController
 	            byte[] bytes = file.getBytes();
 	            blob = new SerialBlob(bytes);
 	        } else {
-	            // Load the default image file from server
 	            Path defaultImagePath = Paths.get("src/main/webapp/images/default-profile-picture.jpg");
 	            byte[] defaultImageBytes = Files.readAllBytes(defaultImagePath);
 	            blob = new SerialBlob(defaultImageBytes);
@@ -363,7 +371,6 @@ public class AdminController
 	
 	
 
-	//view all courses
 	@GetMapping("viewallcourses")
 	  public ModelAndView viewcoures(Model model)
 	  {
@@ -386,10 +393,7 @@ public class AdminController
 	
 	@PostMapping("insertcourse")
     public ModelAndView insertemp(HttpServletRequest request)
-    {
-     
-     
-	
+    {	
     String ForBatch = request.getParameter("ForBatch"); 
      String coursecode = request.getParameter("coursecode");
      String coursetitle = request.getParameter("coursetitle");
@@ -409,8 +413,9 @@ public class AdminController
        
        String msg = service.addcourse(course);
        
-       ModelAndView mv = new ModelAndView("courseregsuccess");
+       ModelAndView mv = new ModelAndView();
        mv.addObject("message", msg);
+       mv.setViewName("redirect:/Admin/addcourse");
      
        return mv;
     }
@@ -466,6 +471,7 @@ public class AdminController
 			  fcm.setCourse(service.displayCourseById(cid));
 			  fcm.setFaculty(service.displayFacultyById(fid));
 			  fcm.setSection(section);
+			  fcm.setCapacity(5);
 			  
 			  msg = service.facultyCourseMapping(fcm);
 			  
@@ -492,6 +498,89 @@ public class AdminController
 	 	  
 		  return mv;
 	  }
+	
+	@GetMapping("ViewRegisteredStudents/{academicYear}/{offeredsem}/{courseid}")
+	  public ModelAndView ViewRegisteredStudents(@PathVariable String academicYear,@PathVariable String offeredsem,@PathVariable int courseid)
+	  {
+		  ModelAndView mv = new ModelAndView("Admin_ViewRegisteredStudentsCourses");
+		  
+		  List<StudentCourseMapping> scm = service.getStudentsByCourses(academicYear, offeredsem, courseid);
+		  if(scm!=null && !scm.isEmpty()) 
+			{
+				scm.sort(Comparator.comparing(mapping -> mapping.getStudent().getId()));
+				mv.addObject("scm",scm);
+				mv.addObject("sem", offeredsem);
+				mv.addObject("ay", academicYear);
+				mv.addObject("cid", courseid);
+			}
+			else
+			{
+				mv.addObject("msg","No Students Registered Upto this Moment");
+			}
+	 	  
+		  return mv;
+	  }
+	
+	@GetMapping("AddExternals")
+	  public ModelAndView AddExternals(@RequestParam String academicYear,@RequestParam String offeredsem,@RequestParam int courseid)
+	  {
+		  ModelAndView mv = new ModelAndView("Admin_AddStudentExternals");
+		  
+		  List<StudentCourseMapping> scm = service.getStudentsByCourses(academicYear, offeredsem, courseid);
+		  if(scm!=null && !scm.isEmpty()) 
+			{
+				scm.sort(Comparator.comparing(mapping -> mapping.getStudent().getId()));
+				mv.addObject("scm",scm);
+				mv.addObject("sem", offeredsem);
+				mv.addObject("ay", academicYear);
+				mv.addObject("cid", courseid);
+			}
+			else
+			{
+				mv.addObject("msg","No Students Registered Upto this Moment");
+			}
+	 	  
+		  return mv;
+	  }
+	@PostMapping("AddStudentExternals/Post")
+	public ModelAndView AddStudentInternalsPosting(HttpServletRequest request) {
+	    ModelAndView mv = new ModelAndView();
+
+	    int courseid = Integer.parseInt(request.getParameter("cid"));
+	    String offeredsem = request.getParameter("sem");
+	    String academicYear = request.getParameter("ay");
+
+
+	    List<StudentCourseMapping> scmList = service.getStudentsByCourses(academicYear, offeredsem, courseid);
+
+	    scmList.sort(Comparator.comparing(mapping -> mapping.getStudent().getId()));
+
+	    for (int i = 0; i < scmList.size(); i++) {
+	        StudentCourseMapping scm = scmList.get(i);
+
+	        int studentExternals = Integer.parseInt(request.getParameter(Integer.toString(i)));
+	        if(scm.getStudentExternals() == -1) 
+	        {
+	        scm.setStudentExternals(studentExternals);
+
+	        service.UpdateExternals(scm);
+	        }
+	    }
+
+	    mv.addObject("message", "Externals added successfully!");
+	    mv.setViewName("redirect:/Admin/viewallcourses");
+
+	    return mv;
+	}
+	
+	@GetMapping("/feedbackSummary")
+	public String getFeedbackSummary(@RequestParam int facultyId, @RequestParam int courseId, Model model) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	    Map<String, Map<String, Integer>> feedbackData = service.getFeedbackSummary(facultyId, courseId);
+	    model.addAttribute("feedbackData", feedbackData);
+	    return "feedbackSummary";
+	}
+
+	
 
 	
 }

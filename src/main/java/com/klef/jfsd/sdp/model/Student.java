@@ -26,6 +26,8 @@ public class Student {
 	@Column(nullable = false, unique = true)
 	private String contact;
 	@Column(nullable = false)
+	private String parentEmail;
+	@Column(nullable = false)
 	private String address;
 	@Column(nullable = false)
 	private String password;
@@ -33,6 +35,8 @@ public class Student {
 	private String status;
 	@Column(nullable = false)
 	private String batchname;
+	@Column(nullable = false)
+	private float mycgpa=-1;
 	
 	@Column(nullable = false)
 	private String registarationStatus;
@@ -124,7 +128,7 @@ public class Student {
 	
 	
 
-	public Student(String id, String name, String fatherName, String motherName, String contact, String address,
+	public Student(String id, String name, String fatherName, String motherName, String contact,String parentEmail, String address,
 			String password, String status, Blob image,String batchname,String registarationStatus) {
 		super();
 		this.id = id;
@@ -132,6 +136,7 @@ public class Student {
 		this.fatherName = fatherName;
 		this.motherName = motherName;
 		this.contact = contact;
+		this.parentEmail=parentEmail;
 		this.address = address;
 		this.password = password;
 		this.status = status;
@@ -175,5 +180,23 @@ public class Student {
 	public void setRegistarationStatus(String registarationStatus) {
 		this.registarationStatus = registarationStatus;
 	}
+
+	public String getParentEmail() {
+		return parentEmail;
+	}
+
+	public void setParentEmail(String parentEmail) {
+		this.parentEmail = parentEmail;
+	}
+
+	public float getMycgpa() {
+		return mycgpa;
+	}
+
+	public void setMycgpa(float mycgpa) {
+		this.mycgpa = mycgpa;
+	}
+
+	
 
 }
