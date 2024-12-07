@@ -1,4 +1,4 @@
-<%@ include file="AdminHome.jsp" %>
+<%@ include file="AdminNavbar.jsp" %>
 <html lang="en">
 <head>
     <meta charset="UTF-8">

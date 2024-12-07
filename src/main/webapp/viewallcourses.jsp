@@ -1,5 +1,4 @@
-<%@ page contentType="text/html; charset=ISO-8859-1" isELIgnored="false"%>
-
+<%@ include file="AdminNavbar.jsp" %>
 <%@ taglib uri="jakarta.tags.core" prefix="c"%>
 
 <html>
@@ -123,7 +122,6 @@
 </head>
 
 <body>
-<%@ include file="AdminHome.jsp" %>
 <br><br>
     <h2 align="center">View All Courses</h2>
 

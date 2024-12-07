@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=ISO-8859-1" isELIgnored="false"%> 
-<%@ include file="AdminHome.jsp" %>
+<%@ include file="AdminNavbar.jsp" %>
 <%@ taglib uri="jakarta.tags.core" prefix="c"%> 
 
 <html> 

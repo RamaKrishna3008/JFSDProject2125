@@ -1,4 +1,4 @@
-<%@ include file="AdminHome.jsp"%>
+<%@ include file="AdminNavbar.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>

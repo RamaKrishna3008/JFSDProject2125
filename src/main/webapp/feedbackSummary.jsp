@@ -1,5 +1,5 @@
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
-<%@ include file="AdminHome.jsp" %>
+<%@ include file="AdminNavbar.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>

@@ -352,6 +352,7 @@ h3 u {
         <p><span class="label">Mother's Name:</span> <span class="value"><c:out value="${student.motherName}" /></span></p>
         <p><span class="label">Address:</span> <span class="value"><c:out value="${student.address}" /></span></p>
         <p><span class="label">Contact No:</span> <span class="value"><c:out value="${student.contact}" /></span></p>
+        <p><span class="label">CGPA:</span> <span class="value"><c:out value="${student.mycgpa}" /></span></p>
         <p><span class="label">Parent Email:</span> <span class="value"><c:out value="${student.parentEmail}" /></span></p>
         <p><span class="label">Status:</span> <span class="value"><c:out value="${student.status}" /></span></p>
         <p><span class="label">Registartion Status:</span> <span class="value"><c:out value="${student.registarationStatus}" /></span></p>

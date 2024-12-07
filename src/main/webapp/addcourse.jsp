@@ -1,3 +1,4 @@
+<%@ include file="AdminNavbar.jsp" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -220,7 +221,6 @@ select:focus {
     </style>
 </head>
 <body>
-<%@ include file="AdminHome.jsp" %>
 <div class="container">
     <div class="card">
         <h4>Course Registration</h4>
