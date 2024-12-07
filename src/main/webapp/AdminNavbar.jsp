@@ -1,6 +1,4 @@
 <%@page import="com.klef.jfsd.sdp.model.Admin"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
     <%
 Admin a = (Admin)session.getAttribute("Admin");
 if(a==null)
