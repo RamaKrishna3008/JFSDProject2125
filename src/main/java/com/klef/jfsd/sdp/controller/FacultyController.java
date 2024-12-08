@@ -1,5 +1,6 @@
 package com.klef.jfsd.sdp.controller;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -36,6 +37,7 @@ import com.klef.jfsd.sdp.service.FacultyService;
 
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -105,6 +107,7 @@ public class FacultyController
 		HttpSession session = request.getSession();
 		session.removeAttribute("faculty");
 		session.setAttribute("faculty", f);
+		session.setMaxInactiveInterval(250);
 		mv.addObject("message",msg);
 		mv.setViewName("redirect:/Faculty/UpdateFacultyProfile");
 		} catch (Exception e) {
@@ -123,7 +126,7 @@ public class FacultyController
 	}
 	
 	@GetMapping("viewFacultyMappedCourses")
-	public ModelAndView viewFacultyMappedCourses(HttpServletRequest request)
+	public ModelAndView viewFacultyMappedCourses(HttpServletRequest request,HttpServletResponse response) throws IOException
 	{
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("viewFacultyMappedCourses");
@@ -132,6 +135,11 @@ public class FacultyController
 		String sem =request.getParameter("sem");
 		HttpSession session = request.getSession(); 
 		Faculty f = (Faculty)session.getAttribute("faculty");
+		if(f==null)
+		{
+			response.sendRedirect("/SessionExpiry");
+			return null ;
+		}
 		mv.addObject("fcmdata", facultyService.findFacultyCoursesAndSections(f.getId(),ay,sem));
 		
 		return mv;
@@ -239,11 +247,16 @@ public class FacultyController
 	}
 
 	@PostMapping("Attendance/Post")
-	public ModelAndView PostAttendance(HttpServletRequest request) {
+	public ModelAndView PostAttendance(HttpServletRequest request,HttpServletResponse response) throws IOException {
 	    ModelAndView mv = new ModelAndView();
 
 	    HttpSession session = request.getSession();
 	    Faculty f = (Faculty) session.getAttribute("faculty");
+	    if(f==null)
+		{
+			response.sendRedirect("/SessionExpiry");
+			return null ;
+		}
 	    int cid = Integer.parseInt(request.getParameter("courseId"));
 	    int section = Integer.parseInt(request.getParameter("section"));
 	    Course c = service.displayCourseById(cid);
@@ -314,11 +327,16 @@ public class FacultyController
 	}
 	
 	@PostMapping("AddStudentInternals/Post")
-	public ModelAndView AddStudentInternalsPosting(HttpServletRequest request) {
+	public ModelAndView AddStudentInternalsPosting(HttpServletRequest request,HttpServletResponse response) throws IOException {
 	    ModelAndView mv = new ModelAndView();
 
 	    HttpSession session = request.getSession();
 	    Faculty f = (Faculty) session.getAttribute("faculty");
+	    if(f==null)
+		{
+			response.sendRedirect("/SessionExpiry");
+			return null ;
+		}
 	    int cid = Integer.parseInt(request.getParameter("courseId"));
 	    int section = Integer.parseInt(request.getParameter("section"));
 
@@ -330,10 +348,12 @@ public class FacultyController
 	    for (int i = 0; i < scmList.size(); i++) {
 	        StudentCourseMapping scm = scmList.get(i);
 
-	        int studentInternals = Integer.parseInt(request.getParameter(Integer.toString(i)));
-	        if(scm.getStudentInternals() == -1) 
+	        String internals = request.getParameter(Integer.toString(i));
+	        int studentInternals = -1;
+	        if(scm.getStudentInternals() == -1 && !internals.isEmpty()) 
 	        {
-	        scm.setStudentInternals(studentInternals);
+	        	studentInternals = Integer.parseInt(internals);
+	        	scm.setStudentInternals(studentInternals);
 
 	        facultyService.UpdateInternals(scm);
 	        }

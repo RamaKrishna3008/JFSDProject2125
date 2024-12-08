@@ -557,11 +557,13 @@ public class AdminController
 
 	    for (int i = 0; i < scmList.size(); i++) {
 	        StudentCourseMapping scm = scmList.get(i);
-
-	        int studentExternals = Integer.parseInt(request.getParameter(Integer.toString(i)));
-	        if(scm.getStudentExternals() == -1) 
+	        
+	        String externals = request.getParameter(Integer.toString(i));
+	        int studentExternals = -1;
+	        if(scm.getStudentExternals() == -1 && !externals.isEmpty()) 
 	        {
-	        scm.setStudentExternals(studentExternals);
+	        	studentExternals=Integer.parseInt(externals);
+	        	scm.setStudentExternals(studentExternals);
 
 	        service.UpdateExternals(scm);
 	        }

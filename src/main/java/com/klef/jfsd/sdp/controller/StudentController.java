@@ -1,6 +1,7 @@
 package com.klef.jfsd.sdp.controller;
 
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -40,6 +41,7 @@ import com.klef.jfsd.sdp.service.StudentService;
 
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -89,6 +91,7 @@ public class StudentController
 		if(studentService.updateStudent(st)) {
 			 HttpSession session = request.getSession();
 		        session.setAttribute("student", st);
+		        session.setMaxInactiveInterval(300);
 			mv.setViewName("studenthome");
 			
 		}else {
@@ -112,22 +115,30 @@ public class StudentController
             
             String subject = "SHS University - OTP Verification";
             String htmlContent = """
-                <div style="font-family: Arial, sans-serif; border: 1px solid #ccc; border-radius: 8px; padding: 20px; max-width: 500px; margin: auto; background-color: #f9f9f9;">
-                    <h2 style="color: #2c3e50; text-align: center;">Welcome to SHS University</h2>
-                    <p style="font-size: 16px; color: #34495e;">Dear Parent,</p>
-                    <p style="font-size: 16px; color: #34495e;">
-                        Thank you for registering your student at <b>SHS University</b>. To complete the email verification process, please use the following OTP:
-                    </p>
-                    <div style="text-align: center; margin: 20px 0;">
-                        <span style="font-size: 24px; color: #e74c3c; font-weight: bold;">%s</span>
-                    </div>
-                    <p style="font-size: 16px; color: #34495e;">This OTP is valid for 10 minutes. Please do not share it with anyone.</p>
-                    <hr style="margin: 20px 0; border: 0; border-top: 1px solid #ccc;">
-                    <p style="font-size: 14px; color: #7f8c8d; text-align: center;">
-                        If you have any questions, contact us at <a href="mailto:support@shsuniversity.edu" style="color: #2980b9;">support@shsuniversity.edu</a>.
-                    </p>
-                </div>
-                """.formatted(generatedOtp);
+            	    <div style="font-family: Arial, sans-serif; border: 1px solid #2c3e50; border-radius: 12px; padding: 20px; max-width: 550px; margin: auto; background-color: #ffffff;">
+            	        <h2 style="color: #34495e; text-align: center; margin-bottom: 20px; font-size: 28px;">Welcome to <span style="color: #e67e22;">SHS University</span></h2>
+            	        <p style="font-size: 16px; color: #2c3e50; line-height: 1.5;">
+            	            Dear Parent,
+            	        </p>
+            	        <p style="font-size: 16px; color: #2c3e50; line-height: 1.5;">
+            	            Thank you for registering your student at <b>SHS University</b>. To complete the email verification process, please use the following OTP:
+            	        </p>
+            	        <div style="text-align: center; margin: 30px 0;">
+            	            <span style="font-size: 30px; color: #d35400; font-weight: bold; padding: 10px 20px; border: 2px dashed #d35400; border-radius: 5px;">%s</span>
+            	        </div>
+            	        <p style="font-size: 16px; color: #2c3e50; line-height: 1.5;">
+            	            This OTP is valid for <b>10 minutes</b>. Please do not share it with anyone.
+            	        </p>
+            	        <hr style="margin: 20px 0; border: 0; border-top: 2px solid #2c3e50;">
+            	        <p style="font-size: 14px; color: #7f8c8d; text-align: center; line-height: 1.5;">
+            	            If you have any questions, contact us at <a href="mailto:support@shsuniversity.edu" style="color: #2980b9; text-decoration: none;">support@shsuniversity.edu</a>.
+            	        </p>
+            	        <p style="text-align: center; font-size: 14px; color: #7f8c8d;">
+            	            © 2024 SHS University. All rights reserved.
+            	        </p>
+            	    </div>
+            	    """.formatted(generatedOtp);
+
             
             System.out.println("Sending OTP to: " + email);
 
@@ -156,10 +167,15 @@ public class StudentController
 	    }
 	
 	@GetMapping("home")
-	public ModelAndView StudentHome(HttpServletRequest request) {
+	public ModelAndView StudentHome(HttpServletRequest request,HttpServletResponse response) throws IOException {
 		ModelAndView mv = new ModelAndView();
 		HttpSession session = request.getSession();
 		Student s = (Student) session.getAttribute("student");
+		if(s==null)
+		{
+			response.sendRedirect("/SessionExpiry");
+			return null ;
+		}
 		List<StudentCourseMapping> scm = studentService.ViewAllCourses(s);
         double sum=0;
         for(int i=0;i<scm.size();i++)
@@ -168,6 +184,18 @@ public class StudentController
         }
 		mv.addObject("courses",studentService.getRegisteredCoursesCount(s));
 		mv.addObject("credits",sum );
+		String sid = s.getId();
+		float grade = updateCGPA(s);
+		if(s.getMycgpa()!=grade) {
+			String str = studentService.updateGrade(grade, s.getId());
+		
+		if(str!=null)
+		{
+			session.removeAttribute("student");
+			session.setAttribute("student", studentService.viewStudentById(sid));
+			session.setMaxInactiveInterval(300);
+		}
+		}
 		mv.setViewName("studenthome");
 		return mv;
 	}
@@ -192,12 +220,17 @@ public class StudentController
 	}
 	
 	@GetMapping("Courses/Registration")
-	public ModelAndView StudentCourseRegistartion(HttpServletRequest request)
+	public ModelAndView StudentCourseRegistartion(HttpServletRequest request,HttpServletResponse response) throws IOException
 	{
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("StudentCourseRegistartion");
 		HttpSession session = request.getSession();
 		Student student = (Student) session.getAttribute("student");
+		if(student==null)
+		{
+			response.sendRedirect("/SessionExpiry");
+			return null ;
+		}
 		
 		String ay=request.getParameter("ay");
 		String sem =request.getParameter("sem");
@@ -222,7 +255,7 @@ public class StudentController
 	}
 	
 	@PostMapping("Courses/Register")
-	public ModelAndView CoursesRegister(HttpServletRequest request)
+	public ModelAndView CoursesRegister(HttpServletRequest request,HttpServletResponse response) throws IOException
 	{
 		ModelAndView mv = new ModelAndView();
 		
@@ -230,6 +263,15 @@ public class StudentController
 		
 		HttpSession session = request.getSession();
 		Student s = (Student) session.getAttribute("student");
+		try {
+			if(s==null)
+			{
+				response.sendRedirect("/SessionExpiry");
+				return null ;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		
 		
@@ -277,11 +319,16 @@ public class StudentController
 	}
 	
 	@GetMapping("ViewMyCourses")
-	public ModelAndView ViewMyCourses(HttpServletRequest request)
+	public ModelAndView ViewMyCourses(HttpServletRequest request,HttpServletResponse response) throws IOException
 	{
 		ModelAndView mv = new ModelAndView();
 		HttpSession session = request.getSession();
 		Student s = (Student) session.getAttribute("student");
+		if(s==null)
+		{
+			response.sendRedirect("/SessionExpiry");
+			return null ;
+		}
 		String ay=request.getParameter("academicyear");
 		String sem =request.getParameter("sem");
 		mv.setViewName("ViewMyCoursesStudent");
@@ -343,7 +390,7 @@ public class StudentController
 	}
 	
 	@GetMapping("AttendanceRegister")
-	public ModelAndView AttendanceRegister(HttpServletRequest request)
+	public ModelAndView AttendanceRegister(HttpServletRequest request,HttpServletResponse response) throws IOException
 	{
 		ModelAndView mv = new ModelAndView();
 		String ay=request.getParameter("academicyear");
@@ -355,6 +402,12 @@ public class StudentController
 		
 		HttpSession session = request.getSession();
 		Student s = (Student) session.getAttribute("student");
+		
+		if(s==null)
+		{
+			response.sendRedirect("/SessionExpiry");
+			return null ;
+		}
 				
 		List<Map<String, Object>> attendanceDetails = new ArrayList<Map<String, Object>>();
 
@@ -379,40 +432,30 @@ public class StudentController
 	}
 	
 	@GetMapping("MyCGPA")
-	public ModelAndView MyCGPA(HttpServletRequest request)
+	public ModelAndView MyCGPA(HttpServletRequest request,HttpServletResponse response) throws IOException
 	{
 		ModelAndView mv = new ModelAndView();
 		
 		HttpSession session = request.getSession();
 		Student s = (Student) session.getAttribute("student");
+		if(s==null)
+		{
+			response.sendRedirect("/SessionExpiry");
+			return null ;
+		}
 				
 		List<StudentCourseMapping> scm = studentService.MyCGPA(s.getId());
 		String sid = s.getId();
 		
-		float grade;
-		int totalgrade = 0;
-		float totalcredits = 0;
+		float grade = updateCGPA(s);
+		if(s.getMycgpa()!=grade) {
+			String str = studentService.updateGrade(grade, s.getId());
 		
-		for(StudentCourseMapping mapping : scm)
-		{
-			if(mapping.getStudentInternals() != -1 && mapping.getStudentExternals() != -1)
-			{
-				totalgrade += (mapping.getGrade()*mapping.getCourse().getCredits());
-				totalcredits += mapping.getCourse().getCredits();
-			}
-		}
-		
-		 if (totalcredits != 0) {
-		        grade = (float) totalgrade / totalcredits;
-		        grade = (float) Math.ceil(grade * 100) / 100;
-		    } else {
-		        grade = 0;
-		    }
-		String str = studentService.updateGrade(grade, s.getId());
 		if(str!=null)
 		{
 			session.removeAttribute("student");
 			session.setAttribute("student", studentService.viewStudentById(sid));
+		}
 		}
 		
 		
@@ -431,12 +474,17 @@ public class StudentController
 	}
 	
 	@GetMapping("EndSemResult")
-	public ModelAndView EndSemResult(HttpServletRequest request)
+	public ModelAndView EndSemResult(HttpServletRequest request,HttpServletResponse response) throws IOException
 	{
 		ModelAndView mv = new ModelAndView();
 		
 		HttpSession session = request.getSession();
 		Student s = (Student) session.getAttribute("student");
+		if(s==null)
+		{
+			response.sendRedirect("/SessionExpiry");
+			return null ;
+		}
 		
 		String ay=request.getParameter("academicyear");
 		String sem =request.getParameter("sem");
@@ -471,11 +519,16 @@ public class StudentController
 	}
 	
 	@GetMapping("GiveCourseFeedBack")
-	public ModelAndView GiveCourseFeedBack(@RequestParam int cid,@RequestParam int fid,HttpServletRequest request)
+	public ModelAndView GiveCourseFeedBack(@RequestParam int cid,@RequestParam int fid,HttpServletRequest request,HttpServletResponse response) throws IOException
 	{
 		ModelAndView mv = new ModelAndView();
 		HttpSession session = request.getSession();
 		Student s = (Student) session.getAttribute("student");
+		if(s==null)
+		{
+			response.sendRedirect("/SessionExpiry");
+			return null ;
+		}
 		
 		long n = studentService.countCourseIdAndStudentId(cid, s.getId());
 		
@@ -524,7 +577,33 @@ public class StudentController
         }
 
         return "ViewMyCoursesHome";
-    }
+    }	
 	
+	public float updateCGPA(Student s)
+	{
+		List<StudentCourseMapping> scm = studentService.MyCGPA(s.getId());
+		
+		float grade;
+		int totalgrade = 0;
+		float totalcredits = 0;
+		
+		for(StudentCourseMapping mapping : scm)
+		{
+			if(mapping.getStudentInternals() != -1 && mapping.getStudentExternals() != -1)
+			{
+				totalgrade += (mapping.getGrade()*mapping.getCourse().getCredits());
+				totalcredits += mapping.getCourse().getCredits();
+			}
+		}
+		
+		 if (totalcredits != 0) {
+		        grade = (float) totalgrade / totalcredits;
+		        grade = (float) Math.ceil(grade * 100) / 100;
+		    } else {
+		        grade = 0;
+		    }
+		 return grade;
+		
+	}
 	
 }

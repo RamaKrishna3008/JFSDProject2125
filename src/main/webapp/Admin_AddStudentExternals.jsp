@@ -5,7 +5,8 @@
 <html> 
 <head> 
 <title>SHS University</title>
-    <link rel="icon" href="/images/university-icon.png">
+<link rel="icon" href="/images/university-icon.png">
+
 <style>
   :root {
     /* Color Palette */

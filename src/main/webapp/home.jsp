@@ -364,7 +364,7 @@ html {
                             <i class="fas fa-calendar-alt feature-icon display-4 mb-3"></i>
                             <h3 class="h4 mb-3">Schedule Management</h3>
                             <p class="text-muted">
-                                Intelligent timetable planning and comprehensive resource allocation system.
+                                Intelligent Schedule planning and comprehensive resource allocation system.
                             </p>
                         </div>
                     </div>
@@ -394,15 +394,15 @@ html {
                     <div class="carousel-item">
                         <img src="/images/image2.jpg" class="d-block w-100" alt="Financial Management">
                         <div class="carousel-caption">
-                            <h3 class="display-6 fw-bold">Financial Management</h3>
-                            <p>Efficient fee collection and financial reporting</p>
+                            <h3 class="display-6 fw-bold">Course Management</h3>
+                            <p>Efficient Course Allocation and Selection reporting</p>
                         </div>
                     </div>
                     <div class="carousel-item">
                         <img src="/images/image3.jpg" class="d-block w-100" alt="Library Management">
                         <div class="carousel-caption">
-                            <h3 class="display-6 fw-bold">Library Management</h3>
-                            <p>Digital library system with advanced book tracking</p>
+                            <h3 class="display-6 fw-bold">Institutional Performance Metrics</h3>
+                            <p>Personalized Learning Insights</p>
                         </div>
                     </div>
                 </div>

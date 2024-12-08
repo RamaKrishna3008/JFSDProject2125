@@ -3,7 +3,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Feedback Summary</title>
+    <title>SHS University</title>
+    <link rel="icon" href="/images/university-icon.png">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {

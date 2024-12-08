@@ -89,13 +89,11 @@ public class BaseController
 		
 		if(f!=null)
 		{
-			System.out.println(f.getId());
 			f.setPassword(pwd);
 			facultyService.UpdateFacultyProfile(f);
 		}
 		if(s!=null)
 		{
-			System.out.println(s.getId());
 			s.setPassword(pwd);
 			adminService.updateStudent(s);
 		}
@@ -107,10 +105,9 @@ public class BaseController
 	}
 	
 	@GetMapping("resetpassword")
-	public ModelAndView resetpassword(@RequestParam String username) 
+	public ModelAndView resetpassword() 
 	{
 		ModelAndView mv = new ModelAndView("resetpassword");
-		mv.addObject("uname",username);
 		return mv;
 	}
 	
@@ -141,6 +138,7 @@ public class BaseController
 		{
 			HttpSession session=request.getSession();
 			session.setAttribute("Admin", a);
+			session.setMaxInactiveInterval(300);
 			mv.addObject("message","success");
 			mv.setViewName("redirect:/Admin/Home");
 				
@@ -157,6 +155,7 @@ public class BaseController
 			{
 			HttpSession session=request.getSession();
 			session.setAttribute("faculty", f);
+			session.setMaxInactiveInterval(300);
 			mv.setViewName("redirect:/Faculty/Home");
 			mv.addObject("message","success");
 			}
@@ -167,6 +166,7 @@ public class BaseController
 		else if (st != null) {
 		        HttpSession session = request.getSession();
 		        session.setAttribute("student", st);
+		        session.setMaxInactiveInterval(300);
 		        if (st.getStatus().equals("NC")) {
 		           
 		            mv.setViewName("redirect:/Student/FirstLogin");
@@ -193,7 +193,7 @@ public class BaseController
 
 	@PostMapping("/sendOtp")
 	@ResponseBody
-	public ResponseEntity<String> sendOtp(@RequestParam String username) 
+	public ResponseEntity<String> sendOtp(@RequestParam String username,HttpServletRequest request) 
 	{
 	    if (username == null || username.trim().isEmpty()) {
 	        return ResponseEntity.badRequest().body("Invalid username");
@@ -208,30 +208,55 @@ public class BaseController
 
 	    try {
 	        generatedOtp = String.format("%06d", new Random().nextInt(999999));
-
-	        String email = student != null ? student.getParentEmail() : faculty.getEmail();
+	        String email = null;
+	        
+	        if(student!=null)
+	        {
+	        	email=student.getParentEmail();
+	        	HttpSession session=request.getSession();
+				session.setAttribute("studentreset", student);
+				session.setMaxInactiveInterval(90);
+	        	
+	        }
+	        if(faculty!=null)
+	        {
+	        	email=faculty.getEmail();
+	        	HttpSession session=request.getSession();
+				session.setAttribute("facultyreset", faculty);
+				session.setMaxInactiveInterval(90);
+	        	
+	        }
+	        
 
 	        MimeMessage message = javaMailSender.createMimeMessage();
 	        MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
 	        String subject = "SHS University - OTP Verification";
 	        String htmlContent = """
-	        <div style="font-family: Arial, sans-serif; border: 1px solid #ccc; border-radius: 8px; padding: 20px; max-width: 500px; margin: auto; background-color: #f9f9f9;">
-	        <h2 style="color: #2c3e50; text-align: center;">Password Reset Request</h2>
-	        <p style="font-size: 16px; color: #34495e;">Dear User,</p>
-	        <p style="font-size: 16px; color: #34495e;">
-	        We received a request to reset your password for your <b>SHS University</b> account. To proceed with resetting your password, please use the following OTP:
-	        </p>
-	        <div style="text-align: center; margin: 20px 0;">
-	        <span style="font-size: 24px; color: #e74c3c; font-weight: bold;">%s</span>
-	        </div>
-	        <p style="font-size: 16px; color: #34495e;">This OTP is valid for 10 minutes. If you did not request a password reset, please ignore this email or contact support.</p>
-	        <hr style="margin: 20px 0; border: 0; border-top: 1px solid #ccc;">
-	        <p style="font-size: 14px; color: #7f8c8d; text-align: center;">
-	        If you have any questions, contact us at <a href="mailto:support@shsuniversity.edu" style="color: #2980b9;">support@shsuniversity.edu</a>.
-	        </p>
-	        </div>
-	        """.formatted(generatedOtp);
+	        	    <div style="font-family: Arial, sans-serif; border: 1px solid #2c3e50; border-radius: 12px; padding: 20px; max-width: 550px; margin: auto; background-color: #ffffff;">
+	        	        <h2 style="color: #34495e; text-align: center; margin-bottom: 20px; font-size: 28px;">Password Reset Request</h2>
+	        	        <p style="font-size: 16px; color: #2c3e50; line-height: 1.6;">
+	        	            Dear User,
+	        	        </p>
+	        	        <p style="font-size: 16px; color: #2c3e50; line-height: 1.6;">
+	        	            We received a request to reset your password for your <b>SHS University</b> account. To proceed with resetting your password, please use the following OTP:
+	        	        </p>
+	        	        <div style="text-align: center; margin: 30px 0;">
+	        	            <span style="font-size: 30px; color: #d35400; font-weight: bold; padding: 10px 20px; border: 2px dashed #d35400; border-radius: 5px;">%s</span>
+	        	        </div>
+	        	        <p style="font-size: 16px; color: #2c3e50; line-height: 1.6;">
+	        	            This OTP is valid for <b>10 minutes</b>. If you did not request a password reset, please ignore this email or contact support.
+	        	        </p>
+	        	        <hr style="margin: 20px 0; border: 0; border-top: 2px solid #2c3e50;">
+	        	        <p style="font-size: 14px; color: #7f8c8d; text-align: center; line-height: 1.5;">
+	        	            If you have any questions, contact us at <a href="mailto:support@shsuniversity.edu" style="color: #2980b9; text-decoration: none;">support@shsuniversity.edu</a>.
+	        	        </p>
+	        	        <p style="text-align: center; font-size: 14px; color: #7f8c8d;">
+	        	            © 2024 SHS University. All rights reserved.
+	        	        </p>
+	        	    </div>
+	        	    """.formatted(generatedOtp);
+
 
 	        helper.setFrom("beast375683@gmail.com");
 	        helper.setTo(email);
@@ -286,6 +311,14 @@ public ModelAndView sessionexpiry()
 	mv.setViewName("redirect:/login");
 	return mv;
 	
+}
+
+@GetMapping("/error-404")
+public ModelAndView handle404Error()
+{
+   ModelAndView mv = new ModelAndView();
+   mv.setViewName("error-404");
+   return mv;
 }
 	
 }

@@ -10,6 +10,8 @@ if(a==null)
 <!DOCTYPE html>
 <html>
 <head>
+<title>SHS University</title>
+    <link rel="icon" href="/images/university-icon.png">
 <style>
 
 

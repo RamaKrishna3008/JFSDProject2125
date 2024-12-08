@@ -50,17 +50,16 @@ public class CaptchaServiceImpl implements CaptchaService
 	    g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 	    g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-	    GradientPaint gradient = new GradientPaint(0, 0, new Color(240, 240, 255),width, height, Color.WHITE, true);
-
-	    g2d.setPaint(gradient);
+	    Color backgroundColor = new Color(240, 240, 240); 
+	    g2d.setColor(backgroundColor);
 	    g2d.fillRect(0, 0, width, height);
 
-	    g2d.setColor(getRandomDarkColor());
-	    g2d.setFont(new Font("Arial", Font.BOLD, 32)); 
+	    g2d.setFont(new Font("Arial", Font.BOLD, 34)); 
 
 	    int x = 20;
 	    for (char c : captchaText.toCharArray()) {
-	        int y = 40 + (int) (Math.random() * 10 - 5);
+	        g2d.setColor(getRandomDarkColor()); 
+	        int y = 40 + (int) (Math.random() * 10 - 5); 
 	        g2d.drawString(String.valueOf(c), x, y);
 	        x += 30; 
 	    }
@@ -78,11 +77,11 @@ public class CaptchaServiceImpl implements CaptchaService
 	}
 
 	private Color getRandomDarkColor() {
-	    int r = (int) (Math.random() * 100);
-	    int g = (int) (Math.random() * 100); 
-	    int b = (int) (Math.random() * 100); 
-	    return new Color(r, g, b);
+	    return new Color((int) (Math.random() * 100), // R
+	                     (int) (Math.random() * 100), // G
+	                     (int) (Math.random() * 100)); // B
 	}
+
 
 
 	

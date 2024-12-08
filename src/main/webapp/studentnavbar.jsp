@@ -3,7 +3,7 @@
 Student st = (Student) session.getAttribute("student");
 if (st == null) {
     response.sendRedirect("/SessionExpiry");
-    return;
+    return ;
 }
 %>
 <style>

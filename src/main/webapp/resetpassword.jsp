@@ -1,5 +1,25 @@
+<%@page import="com.klef.jfsd.sdp.model.Faculty"%>
+<%@page import="com.klef.jfsd.sdp.model.Student"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%
+	String username=null;
+	Student s = (Student) session.getAttribute("studentreset");
+	Faculty f = (Faculty) session.getAttribute("facultyreset");
+	if(f==null && s==null)
+	{
+		response.sendRedirect("/SessionExpiry");
+		return ;
+	}
+	else if(s!=null)
+	{
+		username=s.getId();
+	}
+	else if(f != null)
+	{
+		username = f.getUsername();
+	}
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -68,6 +88,14 @@ h2::after {
     width: 80px;
     height: 3px;
     background: var(--secondary-color);
+}
+
+.timer {
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--error-color);
+    margin-bottom: 20px;
+    font-weight: bold;
 }
 
 .input-group {
@@ -164,11 +192,11 @@ button:disabled {
     </style>
 </head>
 <body>
-<c:if test="${uname != null}">
     <div class="container">
+        <div id="timer" class="timer">Time Remaining: 90 seconds</div>
         <h2>Reset Password</h2>
         <form id="resetPasswordForm" action="/reset-password" method="POST">
-            <input type="hidden" value="${uname}" name="uname">
+            <input type="hidden" value="<%=username %>" name="uname">
             
             <div class="input-group">
                 <div class="label-container">
@@ -194,42 +222,57 @@ button:disabled {
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const passwordInput = document.getElementById('password');
-            const confirmPasswordInput = document.getElementById('confirm-pass');
-            const passwordError = document.getElementById('passwordError');
-            const submitBtn = document.getElementById('submitBtn');
-            const resetPasswordForm = document.getElementById('resetPasswordForm');
+    document.addEventListener('DOMContentLoaded', function() {
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirm-pass');
+        const passwordError = document.getElementById('passwordError');
+        const submitBtn = document.getElementById('submitBtn');
+        const resetPasswordForm = document.getElementById('resetPasswordForm');
+        const timerDisplay = document.getElementById('timer');
 
-            function validatePasswords() {
-                if (passwordInput.value !== confirmPasswordInput.value) {
-                    passwordError.style.display = 'block';
+        let timeRemaining = 90;
+        const timerInterval = setInterval(() => {
+            timeRemaining--;
+            
+            timerDisplay.textContent = `Time Remaining: ` +timeRemaining+` seconds`;
+
+            if (timeRemaining <= 0) {
+                clearInterval(timerInterval);
+                timerDisplay.textContent = 'Time Expired';
+                submitBtn.disabled = true;
+                passwordInput.disabled = true;
+                confirmPasswordInput.disabled = true;
+            }
+        }, 1000);
+
+        function validatePasswords() {
+            if (passwordInput.value !== confirmPasswordInput.value) {
+                passwordError.style.display = 'block';
+                submitBtn.disabled = true;
+                return false;
+            } else {
+                passwordError.style.display = 'none';
+                
+                const passwordStrengthRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+                if (passwordStrengthRegex.test(passwordInput.value)) {
+                    submitBtn.disabled = false;
+                    return true;
+                } else {
                     submitBtn.disabled = true;
                     return false;
-                } else {
-                    passwordError.style.display = 'none';
-                    
-                    const passwordStrengthRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-                    if (passwordStrengthRegex.test(passwordInput.value)) {
-                        submitBtn.disabled = false;
-                        return true;
-                    } else {
-                        submitBtn.disabled = true;
-                        return false;
-                    }
                 }
             }
+        }
 
-            confirmPasswordInput.addEventListener('input', validatePasswords);
-            passwordInput.addEventListener('input', validatePasswords);
+        confirmPasswordInput.addEventListener('input', validatePasswords);
+        passwordInput.addEventListener('input', validatePasswords);
 
-            resetPasswordForm.addEventListener('submit', function(event) {
-                if (!validatePasswords()) {
-                    event.preventDefault();
-                }
-            });
+        resetPasswordForm.addEventListener('submit', function(event) {
+            if (!validatePasswords()) {
+                event.preventDefault();
+            }
         });
+    });
     </script>
-</c:if>
 </body>
 </html>

@@ -4,8 +4,8 @@
 <%
 Student st = (Student) session.getAttribute("student");
 if (st == null) {
-    response.sendRedirect("stsessionexpiry");
-    return;
+    response.sendRedirect("/SessionExpiry");
+    return ;
 }
 %>
 <html>

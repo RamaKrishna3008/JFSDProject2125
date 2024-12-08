@@ -450,7 +450,7 @@ body, html {
        			 <img id="captcha" alt="error" onclick="loadcaptcha()" src=""/>
       			  <input type="text" name="Captcha" placeholder="Enter Captcha"  required="required">
     				</div>
-                    <button type="button" class="forgot-password-btn" onclick="openForgotPasswordModal()">Forgot Password?</button>
+    				<button type="button" class="forgot-password-btn" onclick="openForgotPasswordModal()">Forgot Password?</button>
                     <input type="submit" value="Login">
                 </form>
             </div>
@@ -494,6 +494,29 @@ body, html {
     <div id="modalOverlay" class="modal-overlay"></div>
 
     <script>
+    function openForgotPasswordModal() {
+        // Open the forgot password modal
+        const forgotPasswordModal = document.getElementById('forgotPasswordModal');
+        const modalOverlay = document.getElementById('modalOverlay');
+        
+        if (forgotPasswordModal && modalOverlay) {
+            forgotPasswordModal.style.display = 'block';
+            modalOverlay.style.display = 'block';
+        } else {
+            console.error('Modal elements not found');
+        }
+    }
+
+    function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        const modalOverlay = document.getElementById('modalOverlay');
+        
+        if (modal && modalOverlay) {
+            modal.style.display = 'none';
+            modalOverlay.style.display = 'none';
+        }
+    }
+
     function sendOtp() {
         const username = document.getElementById('forgotUsername').value;
         if (!username) {
@@ -517,16 +540,22 @@ body, html {
         .then(data => {
             alert('OTP sent successfully!');
             closeModal('forgotPasswordModal');
-            document.getElementById('verifyOtpModal').style.display = 'block';
-            document.getElementById('modalOverlay').style.display = 'block';
+            const verifyOtpModal = document.getElementById('verifyOtpModal');
+            const modalOverlay = document.getElementById('modalOverlay');
+            
+            if (verifyOtpModal && modalOverlay) {
+                verifyOtpModal.style.display = 'block';
+                modalOverlay.style.display = 'block';
+            }
         })
         .catch(err => {
             alert(err.message);
         });
     }
+
     function verifyOtp() {
         const otp = document.getElementById('otpInput').value;
-        const username = document.getElementById('forgotUsername').value; // Get the username from the modal input field
+        const username = document.getElementById('forgotUsername').value;
 
         if (!otp) {
             alert('Please enter the OTP.');
@@ -541,24 +570,13 @@ body, html {
             if (data.includes('Verified')) {
                 alert('OTP verified successfully!');
                 closeModal('verifyOtpModal');
-                window.location.href = '/resetpassword?username=' + encodeURIComponent(username);
+                window.location.href = '/resetpassword';
             } else {
                 alert('Invalid OTP.');
             }
         })
         .catch(err => alert('Error verifying OTP.'));
     }
-
-
-        function openForgotPasswordModal() {
-            document.getElementById('forgotPasswordModal').style.display = 'block';
-            document.getElementById('modalOverlay').style.display = 'block';
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-            document.getElementById('modalOverlay').style.display = 'none';
-        }
     </script>
     
 <script>
